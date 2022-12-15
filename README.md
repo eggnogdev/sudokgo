@@ -12,7 +12,7 @@ This app goes out to the amazing Lauren, I love you so much!
 
 ## Getting Started With SudokGo
 
-SudokGo is currently available for download on the Google Play Store. Upon first open, you are prompted to enter any name that you would like to be referred to by the app. This app can be used without the creation of an account, therefore the subsequent prompt to create an account is optional unless you would like to be able to enjoy the multiplayer/online functionality
+Upon first open, you are prompted to enter any name that you would like to be your display name. This app can be used without the creation of an account, therefore the subsequent prompt to create an account is optional unless you would like to be able to enjoy the multiplayer/online functionality. You are able to create an account later so don't worry if you accidentally skip account creation.
 
 ## Supporting The Project
 
