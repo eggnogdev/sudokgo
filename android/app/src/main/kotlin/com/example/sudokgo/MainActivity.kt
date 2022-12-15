@@ -1,4 +1,4 @@
-package com.example.sudokgo
+package com.danielegorov.sudokgo
 
 import io.flutter.embedding.android.FlutterActivity
 

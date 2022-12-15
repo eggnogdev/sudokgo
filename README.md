@@ -1,16 +1,22 @@
 # sudokgo
 
-A new Flutter project.
+SudokGo! - Play sudoku with your friends (or not).
 
-## Getting Started
+## What is SudokGo?
 
-This project is a starting point for a Flutter application.
+SudokGo was an idea born when I was working on a sudoku app for my beautiful girlfriend Lauren. I wanted to make a really simple and beautiful sudoku app for her that fit her likings perfectly.
 
-A few resources to get you started if this is your first Flutter project:
+The idea of multiplayer came into the question so both Lauren and I could play together, even if we were halfway across the world from each other at the time. So I began working on SudokGo (name courtesy of Lauren), first with basic sudoku single player functionality that she could enjoy, and then with multiplayer additions that we could enjoy together.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This app goes out to the amazing Lauren, I love you so much!
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Getting Started With SudokGo
+
+SudokGo is currently available for download on the Google Play Store. Upon first open, you are prompted to enter any name that you would like to be referred to by the app. This app can be used without the creation of an account, therefore the subsequent prompt to create an account is optional unless you would like to be able to enjoy the multiplayer/online functionality
+
+## Supporting The Project
+
+No one is required to purchase anything but any support is greatly appreciated! One main method could be to enable ads in the settings page. Simply choose your preferred ad amount (minimal, normal, sellout), and continue using the app!
+
+You can also buy me a coffee!
+https://ko-fi.com/egorov
