@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +8,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sudokgo/src/hive_wrapper/hive_wrapper.dart';
 import 'package:sudokgo/src/main_screen/main_screen.dart';
 import 'package:sudokgo/src/onboarding/onboarding_screen.dart';
+import 'package:sudokgo/src/options_screen/options_screen.dart';
+import 'package:sudokgo/src/page_transition/page_transition.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,11 +42,27 @@ class SudokGo extends StatelessWidget {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => const MainScreen(),
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            child: const MainScreen(),
+            context: context,
+            state: state,
+          ),
         ),
         GoRoute(
           path: '/onboarding',
-          builder: (context, state) => const OnboardingScreen(),
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            child: const OnboardingScreen(),
+            context: context,
+            state: state,
+          ),
+        ),
+        GoRoute(
+          path: '/options',
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            child: const OptionsScreen(),
+            context: context,
+            state: state,
+          ),
         ),
       ],
     );
