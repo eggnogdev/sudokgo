@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sliding_switch/sliding_switch.dart';
 import 'package:sudokgo/src/fonts_and_icons/sudokgo_icons_icons.dart';
 import 'package:sudokgo/src/hive_wrapper/hive_wrapper.dart';
@@ -35,7 +36,9 @@ class MainScreen extends StatelessWidget {
                             SudokGoIcons.menu,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            GoRouter.of(context).go('/options');
+                          },
                         ),
                       ],
                     ),
