@@ -11,7 +11,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final TextEditingController _controller = TextEditingController();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +69,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             onTap: () async {
                               final String name = _controller.value.text;
                               if (name != '') {
-                                await HiveWrapper.setDisplayName(_controller.value.text);
+                                await HiveWrapper.setDisplayName(
+                                    _controller.value.text);
                                 GoRouter.of(context).go('/');
                               }
                             },
@@ -77,7 +78,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               width: 50.0,
                               height: 50.0,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor.withOpacity(0.5),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.5),
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
                               child: const Center(
