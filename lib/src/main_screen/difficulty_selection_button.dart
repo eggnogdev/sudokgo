@@ -19,11 +19,14 @@ class DifficultySelectionButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
-            foregroundColor: null,
-            backgroundColor: Theme.of(context).primaryColorLight,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            )),
+          elevation: 10.0,
+          shadowColor: Theme.of(context).colorScheme.primaryContainer,
+          foregroundColor: Theme.of(context).colorScheme.onSurface,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(

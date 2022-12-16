@@ -10,18 +10,17 @@ class SoloOnlineSwitch extends StatefulWidget {
 
 class _SoloOnlineSwitchState extends State<SoloOnlineSwitch> {
   bool online = false;
-  
+
   @override
   Widget build(BuildContext context) {
     return SlidingSwitch(
       value: online,
       textOff: 'solo',
       textOn: 'online',
-      background: Theme.of(context).primaryColor,
-      colorOn: Theme.of(context).primaryColor,
-      colorOff: Theme.of(context).primaryColor,
-      buttonColor: Theme.of(context).primaryColorLight,
-      inactiveColor: Theme.of(context).primaryColorDark,
+      background: Theme.of(context).colorScheme.surface,
+      colorOn: Theme.of(context).colorScheme.onPrimary,
+      colorOff: Theme.of(context).colorScheme.onPrimary,
+      buttonColor: Theme.of(context).colorScheme.primary,
       onChanged: (value) {
         setState(() {
           online = value;
