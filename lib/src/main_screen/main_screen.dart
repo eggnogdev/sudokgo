@@ -11,7 +11,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -33,7 +33,7 @@ class MainScreen extends StatelessWidget {
                           splashRadius: 0.1,
                           icon: Icon(
                             SudokGoIcons.menu,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           onPressed: () {},
                         ),
@@ -50,7 +50,7 @@ class MainScreen extends StatelessWidget {
                           'Welcome, ${HiveWrapper.getDisplayName()}!',
                           style: TextStyle(
                             fontSize: 40.0,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.onBackground,
                           ),
                         ),
                       ],

@@ -50,10 +50,26 @@ class SudokGo extends StatelessWidget {
     return MaterialApp.router(
       title: 'SudokGo',
       debugShowCheckedModeBanner: false,
-      theme: FlexColorScheme.light(
-        colors: FlexColor.schemes[FlexScheme.deepPurple]?.light,
-        textTheme: GoogleFonts.indieFlowerTextTheme()
-      ).toTheme,
+      theme: ThemeData(
+        colorScheme: ColorScheme(
+          brightness: Brightness.light,
+          background: Colors.blueGrey[50]!,
+          onBackground: Colors.black,
+          surface: Colors.blueGrey[50]!,
+          onSurface: Colors.black,
+          primary: Colors.purple[400]!,
+          primaryContainer: Colors.purple[800],
+          onPrimary: Colors.white,
+          onPrimaryContainer: Colors.white,
+          secondary: Colors.green,
+          secondaryContainer: Colors.green[800],
+          onSecondary: Colors.black,
+          onSecondaryContainer: Colors.white,
+          error: Colors.red[900]!,
+          onError: Colors.white,
+        ),
+        textTheme: GoogleFonts.indieFlowerTextTheme(),
+      ),
       routeInformationProvider: router.routeInformationProvider,
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
