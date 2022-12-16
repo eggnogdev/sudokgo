@@ -15,6 +15,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).primaryColorLight,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: SizedBox(
@@ -23,10 +24,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              const Text(
+              Text(
                 'Welcome to SudokGo!',
                 style: TextStyle(
                   fontSize: 32.0,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               Container(
@@ -37,10 +39,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'pick a display name',
                       style: TextStyle(
                         fontSize: 18.0,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                     const SizedBox(
@@ -55,18 +58,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),
-                            filled: true,
-                            fillColor: Colors.grey.shade300,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
                           ),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 20.0,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                         Positioned(
-                          right: 6,
-                          bottom: 9,
-                          child: GestureDetector(
-                            onTap: () async {
+                          right: 0,
+                          bottom: 0,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              fixedSize: const Size.square(70.0,),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                            ),
+                            onPressed: () async {
                               final String name = _controller.value.text;
                               if (name != '') {
                                 await HiveWrapper.setDisplayName(
@@ -74,23 +89,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 GoRouter.of(context).go('/');
                               }
                             },
-                            child: Container(
-                              width: 50.0,
-                              height: 50.0,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  '>',
-                                  style: TextStyle(
-                                    height: 1.1,
-                                    fontSize: 50.0,
-                                  ),
-                                ),
+                            child: const Text(
+                              '>',
+                              style: TextStyle(
+                                fontSize: 48.0,
                               ),
                             ),
                           ),
@@ -103,10 +105,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(
                 height: 100.0,
               ),
-              const Text(
+              Text(
                 'dedicated to Lauren',
                 style: TextStyle(
                   fontSize: 16.0,
+                  color: Theme.of(context).primaryColor,
                 ),
               )
             ],
