@@ -67,7 +67,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                           style: TextStyle(
                             fontSize: 20.0,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         Positioned(
