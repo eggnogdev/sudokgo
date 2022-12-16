@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:sudokgo/src/game_screen/game_screen.dart';
 import 'package:sudokgo/src/hive_wrapper/hive_wrapper.dart';
 import 'package:sudokgo/src/main_screen/main_screen.dart';
 import 'package:sudokgo/src/onboarding/onboarding_screen.dart';
@@ -61,6 +62,14 @@ class SudokGo extends StatelessWidget {
             state: state,
           ),
         ),
+        GoRoute(
+          path: '/game',
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            child: const GameScreen(),
+            context: context,
+            state: state,
+          ),
+        ),
       ],
     );
 
@@ -78,8 +87,8 @@ class SudokGo extends StatelessWidget {
           primaryContainer: Colors.purple[800],
           onPrimary: Colors.white,
           onPrimaryContainer: Colors.white,
-          secondary: Colors.green,
-          secondaryContainer: Colors.green[800],
+          secondary: Colors.grey[400]!,
+          secondaryContainer: Colors.grey[600],
           onSecondary: Colors.black,
           onSecondaryContainer: Colors.white,
           error: Colors.red[900]!,

@@ -63,7 +63,9 @@ class MainScreen extends StatelessWidget {
               DifficultySelectionButton(
                 title: 'easy',
                 bestTime: 'n/a',
-                onPressed: () {},
+                onPressed: () {
+                  GoRouter.of(context).go('/game');
+                },
               ),
               DifficultySelectionButton(
                 title: 'medium',
