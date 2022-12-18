@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:sudokgo/src/game_screen/game_box.dart';
+import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 class GameBoard extends StatefulWidget {
-  const GameBoard({super.key});
+  const GameBoard({super.key, required this.gameSession});
+
+  final GameSession gameSession;
 
   @override
   State<GameBoard> createState() => _GameBoardState();
 }
 
 class _GameBoardState extends State<GameBoard> {
-  late List<List<int>> puzzle;
-  late List<List<int>> solution;
 
   @override
   void initState() {
     super.initState();
 
     final sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
-    puzzle = sudoku.newSudoku;
-    solution = sudoku.newSudokuSolved;
+
+    widget.gameSession.puzzle = flattenPuzzleToString(sudoku.newSudoku);
+    widget.gameSession.userSolution.value = List.of(sudoku.newSudoku);
   }
   
   @override
@@ -43,7 +45,19 @@ class _GameBoardState extends State<GameBoard> {
           for (int i = 0; i < 3; i++) Row(
             children: [
               for (int j = 0; j < 3; j++) GameBox(
-                cells: getBox(i * 3 + j, puzzle),
+                gameSession: widget.gameSession,
+                cellOnPressed: (row, col) {
+                  final String? value = widget.gameSession.selectedValue.value;
+
+                  if (value == null) return;
+
+                  if (value == 'X') {
+                    updateUserSolution(row, col, 0);
+                  } else {
+                    updateUserSolution(row, col, int.parse(value));
+                  }
+                },
+                cells: getBox(i * 3 + j),
                 boardSize: size,
               )
             ],
@@ -53,11 +67,21 @@ class _GameBoardState extends State<GameBoard> {
     );
   }
 
-  List<List<int>> getBox(int box, List<List<int>> puzzle) {
-    List<List<int>> res = [
-      [0, 0, 0,],
-      [0, 0, 0,],
-      [0, 0, 0,],
+  void updateUserSolution(
+    int row,
+    int col,
+    int value,
+  ) {
+    final temp = List.of(widget.gameSession.userSolution.value);
+    temp[row][col] = value;
+    widget.gameSession.userSolution.value = temp;
+  }
+
+  List<List<List<int>>> getBox(int box) {
+    List<List<List<int>>> res = [
+      [[], [], [],],
+      [[], [], [],],
+      [[], [], [],],
     ];
 
     late int rowMin;
@@ -92,10 +116,27 @@ class _GameBoardState extends State<GameBoard> {
     for (int row = rowMin; row < rowMax; row++, i++) {
       int j = 0;
       for (int col = colMin; col < colMax; col++, j++) {
-        res[i][j] = puzzle[row][col];
+        res[i][j] = [row, col];
       }
     }
 
     return res;
   }
+
+  /// This function flattens the given unsolved puzzle to a string for no reason
+  /// other than as described inside the class definition of [GameSession].
+  /// Please take a look at that class if you would like an explanation to this
+  /// insane functionality.
+  String flattenPuzzleToString(List puzzle) {
+    String res = '';
+
+    final flattened = puzzle.expand((element) => element).toList();
+
+    for (final element in flattened) {
+      res += element.toString();
+    }
+
+    return res;
+  }
+  
 }

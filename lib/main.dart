@@ -65,7 +65,9 @@ class SudokGo extends StatelessWidget {
         GoRoute(
           path: '/game',
           pageBuilder: (context, state) => buildPageWithDefaultTransition(
-            child: const GameScreen(),
+            child: GameScreen(
+              gameSession: GameSession(),
+            ),
             context: context,
             state: state,
           ),
