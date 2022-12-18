@@ -11,6 +11,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: SizedBox(
@@ -61,19 +62,19 @@ class MainScreen extends StatelessWidget {
                 ],
               ),
               DifficultySelectionButton(
-                title: 'easy',
+                difficulty: GameDifficulty.easy,
                 bestTime: 'n/a',
                 onPressed: () {
                   GoRouter.of(context).go('/game');
                 },
               ),
               DifficultySelectionButton(
-                title: 'medium',
+                difficulty: GameDifficulty.medium,
                 bestTime: 'n/a',
                 onPressed: () {},
               ),
               DifficultySelectionButton(
-                title: 'hard',
+                difficulty: GameDifficulty.hard,
                 bestTime: 'n/a',
                 onPressed: () {},
               ),

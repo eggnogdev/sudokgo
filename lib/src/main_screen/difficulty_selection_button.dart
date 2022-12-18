@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 
 class DifficultySelectionButton extends StatelessWidget {
   const DifficultySelectionButton({
     super.key,
-    required this.title,
     required this.bestTime,
     required this.onPressed,
+    required this.difficulty,
   });
 
-  final String title;
   final String bestTime;
   final Function() onPressed;
+  final GameDifficulty difficulty;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class DifficultySelectionButton extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    difficulty.value,
                     style: const TextStyle(
                       fontSize: 28.0,
                     ),
