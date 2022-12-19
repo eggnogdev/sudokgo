@@ -16,6 +16,7 @@ class GameScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         await saveGame();
+        GameSession.selectedDifficulty = null;
         GoRouter.of(context).go('/');
         return true;
       },
@@ -40,6 +41,7 @@ class GameScreen extends StatelessWidget {
               ),
               onPressed: () async {
                 await saveGame();
+                GameSession.selectedDifficulty = null;
                 GoRouter.of(context).go('/');
               },
               child: Text(
