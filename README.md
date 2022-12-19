@@ -20,3 +20,9 @@ No one is required to purchase anything but any support is greatly appreciated! 
 
 You can also buy me a coffee!
 https://ko-fi.com/egorov
+
+
+## Attributions
+
+<a href="https://www.flaticon.com/free-icons/spin" title="spin icons">Spin icons created by Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/profit" title="profit icons">Profit icons created by smashingstocks - Flaticon</a>

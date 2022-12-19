@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
+import 'package:sudokgo/src/widgets/text_field.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -49,58 +50,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     const SizedBox(
                       height: 5.0,
                     ),
-                    Stack(
-                      children: [
-                        TextField(
-                          controller: _controller,
-                          decoration: InputDecoration(
-                            suffixIcon: const SizedBox(),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                              borderSide: BorderSide(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              fixedSize: const Size.square(
-                                70.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                            ),
-                            onPressed: () async {
-                              final String name = _controller.value.text;
-                              if (name != '') {
-                                await HiveWrapper.setDisplayName(
-                                  _controller.value.text,
-                                );
-                                GoRouter.of(context).go('/');
-                              }
-                            },
-                            child: const Text(
-                              '>',
-                              style: TextStyle(
-                                fontSize: 48.0,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+                    SudokGoTextField(
+                      controller: _controller,
+                      enterOnPressed: () async {
+                        final String name = _controller.value.text;
+                        if (name != '') {
+                          await HiveWrapper.setDisplayName(
+                            _controller.value.text,
+                          );
+                          GoRouter.of(context).go('/');
+                        }
+                      },
                     ),
                   ],
                 ),
