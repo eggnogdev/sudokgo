@@ -486,10 +486,12 @@ packages:
   sliding_switch:
     dependency: "direct main"
     description:
-      name: sliding_switch
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
+      path: "."
+      ref: HEAD
+      resolved-ref: ee2173462ab1da07cb2c46a1f6577ff0a9cf2928
+      url: "https://github.com/Daniel-Egorov/flutter_sliding_switch.git"
+    source: git
+    version: "1.0.0"
   source_gen:
     dependency: transitive
     description:
