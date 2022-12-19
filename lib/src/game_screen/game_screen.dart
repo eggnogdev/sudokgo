@@ -23,6 +23,7 @@ class GameScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: SudokGoAppBar.create(
+          title: const Text(''),
           backOnPressed: () async {
             await saveGame();
             GameSession.selectedDifficulty = null;
