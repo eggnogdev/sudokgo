@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_switch/sliding_switch.dart';
 import 'package:sudokgo/src/online/online_status.dart';
+import 'package:sudokgo/src/widgets/coming_soon_dialog.dart';
 
 class SoloOnlineSwitch extends StatelessWidget {
   const SoloOnlineSwitch({super.key});
@@ -14,6 +15,7 @@ class SoloOnlineSwitch extends StatelessWidget {
           value: value,
           textOff: 'solo',
           textOn: 'online',
+          animationDuration: const Duration(milliseconds: 200),
           background: Theme.of(context).colorScheme.surface,
           colorOn: Theme.of(context).colorScheme.onPrimary,
           colorOff: Theme.of(context).colorScheme.onPrimary,
@@ -21,9 +23,25 @@ class SoloOnlineSwitch extends StatelessWidget {
           onChanged: (value) {
             OnlineStatus.online.value = value;
           },
-          onSwipe: () {},
-          onTap: () {},
-          onDoubleTap: () {},
+          disabled: true,
+          disabledOnTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => const ComingSoonDialog(),
+            );
+          },
+          disabledOnDoubleTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => const ComingSoonDialog(),
+            );
+          },
+          disabledOnSwipe: () {
+            showDialog(
+              context: context,
+              builder: (context) => const ComingSoonDialog(),
+            );
+          },
         );
       }
     );
