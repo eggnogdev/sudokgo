@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sudokgo/src/fonts_and_icons/sudokgo_icons_icons.dart';
-import 'package:sudokgo/src/hive_wrapper/hive_wrapper.dart';
+import 'package:sudokgo/src/game_screen/game_difficulty.dart';
+import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/main_screen/difficulty_selection_button.dart';
 import 'package:sudokgo/src/main_screen/solo_online_switch.dart';
 
@@ -71,12 +72,16 @@ class MainScreen extends StatelessWidget {
               DifficultySelectionButton(
                 difficulty: GameDifficulty.medium,
                 bestTime: 'n/a',
-                onPressed: () {},
+                onPressed: () {
+                  GoRouter.of(context).go('/game');
+                },
               ),
               DifficultySelectionButton(
                 difficulty: GameDifficulty.hard,
                 bestTime: 'n/a',
-                onPressed: () {},
+                onPressed: () {
+                  GoRouter.of(context).go('/game');
+                },
               ),
               const SoloOnlineSwitch(),
               const SizedBox(
