@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sudokgo/src/game_screen/game_box.dart';
+import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
+import 'package:sudokgo/src/hive/game.dart';
+import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 class GameBoard extends StatefulWidget {
@@ -18,10 +21,11 @@ class _GameBoardState extends State<GameBoard> {
   void initState() {
     super.initState();
 
-    final sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
+    final game = grabGame();
 
-    widget.gameSession.puzzle = flattenPuzzleToString(sudoku.newSudoku);
-    widget.gameSession.userSolution.value = List.of(sudoku.newSudoku);
+    widget.gameSession.puzzle = game.puzzle;
+    widget.gameSession.userSolution.value = game.userSolution;
+    widget.gameSession.game = game;
   }
   
   @override
@@ -65,6 +69,40 @@ class _GameBoardState extends State<GameBoard> {
         ],
       ),
     );
+  }
+
+  Game grabGame() {
+    return getPuzzleFromHive() ?? generateSudoku();
+  }
+
+  Game? getPuzzleFromHive() {
+    return HiveWrapper.getGame(GameSession.selectedDifficulty!);
+  }
+
+  Game generateSudoku() {
+    SudokuGenerator sudoku;
+    Game res;
+    
+    switch (GameSession.selectedDifficulty) {
+      case GameDifficulty.easy:
+        sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
+        break;
+      case GameDifficulty.medium:
+        sudoku = SudokuGenerator(emptySquares: 36, uniqueSolution: true);
+        break;
+      case GameDifficulty.hard:
+        sudoku = SudokuGenerator(emptySquares: 54, uniqueSolution: true);
+        break;
+      default:
+        throw Exception('Invalid GameDifficulty value: ${GameSession.selectedDifficulty?.value}');
+    }
+
+    res = Game()
+      ..puzzle = flattenPuzzleToString(sudoku.newSudoku)
+      ..solution = sudoku.newSudokuSolved
+      ..userSolution = sudoku.newSudoku;
+    
+    return res;
   }
 
   void updateUserSolution(

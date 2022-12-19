@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sudokgo/src/game_screen/game_difficulty.dart';
+import 'package:sudokgo/src/game_screen/game_session.dart';
 
 class DifficultySelectionButton extends StatelessWidget {
   const DifficultySelectionButton({
@@ -18,7 +19,11 @@ class DifficultySelectionButton extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width / 1.25,
       child: TextButton(
-        onPressed: onPressed,
+        onPressed: () {
+          GameSession.selectedDifficulty = difficulty;
+
+          onPressed();
+        },
         style: TextButton.styleFrom(
           elevation: 10.0,
           shadowColor: Theme.of(context).colorScheme.primaryContainer,

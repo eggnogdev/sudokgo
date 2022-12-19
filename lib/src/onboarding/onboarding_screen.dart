@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sudokgo/src/hive_wrapper/hive_wrapper.dart';
+import 'package:sudokgo/src/hive/hive_wrapper.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
