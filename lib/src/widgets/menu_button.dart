@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:sudokgo/src/game_screen/game_difficulty.dart';
-import 'package:sudokgo/src/game_screen/game_session.dart';
 
-class DifficultySelectionButton extends StatelessWidget {
-  const DifficultySelectionButton({
-    super.key,
-    required this.bestTime,
-    required this.onPressed,
-    required this.difficulty,
-  });
+class SudokGoMenuButton extends StatelessWidget {
+  const SudokGoMenuButton({super.key, required this.onPressed, required this.title, this.subtitle, this.width, this.height, this.suffixIcon,});
 
-  final String bestTime;
   final Function() onPressed;
-  final GameDifficulty difficulty;
+  final String title;
+  final String? subtitle;
+  final double? width;
+  final double? height;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 1.25,
+      width: width,
+      height: height,
       child: TextButton(
-        onPressed: () {
-          GameSession.selectedDifficulty = difficulty;
-
-          onPressed();
-        },
+        onPressed: onPressed,
         style: TextButton.styleFrom(
           elevation: 10.0,
           shadowColor: Theme.of(context).colorScheme.primaryContainer,
@@ -34,7 +27,9 @@ class DifficultySelectionButton extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20.0,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -42,25 +37,20 @@ class DifficultySelectionButton extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    difficulty.value,
+                    title,
                     style: const TextStyle(
                       fontSize: 28.0,
                     ),
                   ),
-                  Text(
-                    'best time: $bestTime',
+                  if (subtitle != null) Text(
+                    subtitle!,
                     style: const TextStyle(
                       fontSize: 16.0,
                     ),
                   ),
                 ],
               ),
-              const Text(
-                '>',
-                style: TextStyle(
-                  fontSize: 48.0,
-                ),
-              )
+              if (suffixIcon != null) suffixIcon!,
             ],
           ),
         ),
