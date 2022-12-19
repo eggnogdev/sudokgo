@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sudokgo/src/fonts_and_icons/sudokgo_icons_icons.dart';
 import 'package:sudokgo/src/game_screen/game_difficulty.dart';
+import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
-import 'package:sudokgo/src/main_screen/difficulty_selection_button.dart';
 import 'package:sudokgo/src/main_screen/solo_online_switch.dart';
+import 'package:sudokgo/src/widgets/menu_button.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -62,24 +63,48 @@ class MainScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              DifficultySelectionButton(
-                difficulty: GameDifficulty.easy,
-                bestTime: 'n/a',
+              SudokGoMenuButton(
+                title: GameDifficulty.easy.value,
+                subtitle: 'best time: n/a',
+                width: MediaQuery.of(context).size.width / 1.25,
+                suffixIcon: const Text(
+                  '>',
+                  style: TextStyle(
+                    fontSize: 48.0,
+                  ),
+                ),
                 onPressed: () {
+                  GameSession.selectedDifficulty = GameDifficulty.easy;
                   GoRouter.of(context).go('/game');
                 },
               ),
-              DifficultySelectionButton(
-                difficulty: GameDifficulty.medium,
-                bestTime: 'n/a',
+              SudokGoMenuButton(
+                title: GameDifficulty.medium.value,
+                subtitle: 'best time: n/a',
+                width: MediaQuery.of(context).size.width / 1.25,
+                suffixIcon: const Text(
+                  '>',
+                  style: TextStyle(
+                    fontSize: 48.0,
+                  ),
+                ),
                 onPressed: () {
+                  GameSession.selectedDifficulty = GameDifficulty.medium;
                   GoRouter.of(context).go('/game');
                 },
               ),
-              DifficultySelectionButton(
-                difficulty: GameDifficulty.hard,
-                bestTime: 'n/a',
+              SudokGoMenuButton(
+                title: GameDifficulty.hard.value,
+                subtitle: 'best time: n/a',
+                width: MediaQuery.of(context).size.width / 1.25,
+                suffixIcon: const Text(
+                  '>',
+                  style: TextStyle(
+                    fontSize: 48.0,
+                  ),
+                ),
                 onPressed: () {
+                  GameSession.selectedDifficulty = GameDifficulty.hard;
                   GoRouter.of(context).go('/game');
                 },
               ),
