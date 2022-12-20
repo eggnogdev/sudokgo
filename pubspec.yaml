@@ -37,8 +37,3 @@ flutter:
 
   assets:
     - assets/images/
-
-  fonts:
-    - family: SudokGoIcons
-      fonts:
-        - asset: assets/fonts/SudokGoIcons.ttf

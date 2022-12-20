@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sudokgo/src/fonts_and_icons/sudokgo_icons_icons.dart';
 import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
+import 'package:sudokgo/src/main_screen/continue_or_new_dialog.dart';
 import 'package:sudokgo/src/main_screen/solo_online_switch.dart';
 import 'package:sudokgo/src/widgets/menu_button.dart';
 
@@ -33,10 +33,10 @@ class MainScreen extends StatelessWidget {
                       children: [
                         IconButton(
                           iconSize: 50.0,
-                          splashRadius: 0.1,
-                          icon: Icon(
-                            SudokGoIcons.menu,
-                            color: Theme.of(context).colorScheme.primary,
+                          splashRadius: 30.0,
+                          icon: Image.asset(
+                            'assets/images/menu.png',
+                            color: Theme.of(context).colorScheme.onBackground,  
                           ),
                           onPressed: () {
                             GoRouter.of(context).go('/options');
@@ -75,7 +75,10 @@ class MainScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.easy;
-                  GoRouter.of(context).go('/game');
+                  showDialog(
+                    context: context,
+                    builder: (context) => const ContinueOrNewDialog(),
+                  );
                 },
               ),
               SudokGoMenuButton(
@@ -90,7 +93,10 @@ class MainScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.medium;
-                  GoRouter.of(context).go('/game');
+                  showDialog(
+                    context: context,
+                    builder: (context) => const ContinueOrNewDialog(),
+                  );
                 },
               ),
               SudokGoMenuButton(
@@ -105,7 +111,10 @@ class MainScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.hard;
-                  GoRouter.of(context).go('/game');
+                  showDialog(
+                    context: context,
+                    builder: (context) => const ContinueOrNewDialog(),
+                  );
                 },
               ),
               const SoloOnlineSwitch(),

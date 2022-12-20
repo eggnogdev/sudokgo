@@ -26,3 +26,4 @@ https://ko-fi.com/egorov
 
 <a href="https://www.flaticon.com/free-icons/spin" title="spin icons">Spin icons created by Freepik - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/profit" title="profit icons">Profit icons created by smashingstocks - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/menu" title="menu icons">Menu icons created by FlexSolution - Flaticon</a>
