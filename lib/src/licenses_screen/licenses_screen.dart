@@ -11,58 +11,68 @@ class LicensesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomLicensePage((context, licenseData) {
-      return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: SudokGoAppBar.create(
-          title: Text(
-            'licenses',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onBackground,
+      return WillPopScope(
+        onWillPop: () async {
+          backOnPressed(context);
+          return false;
+        },
+        child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          appBar: SudokGoAppBar.create(
+            title: Text(
+              'licenses',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
             ),
+            backOnPressed: () {
+              backOnPressed(context);
+            },
+            context: context,
           ),
-          backOnPressed: () {
-            GoRouter.of(context).go('/');
-          },
-          context: context,
-        ),
-        body: SingleChildScrollView(
-          child: licenseData.connectionState == ConnectionState.done ?
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                ...licenseData.data!.packages.map(
-                  (currentPackage) => Container(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 10.0,
-                    ),
-                    child: SudokGoMenuButton(
-                      width: MediaQuery.of(context).size.width / 1.25,
-                      title: currentPackage,
-                      subtitle: '${licenseData.data!.packageLicenseBindings[currentPackage]!.length} licenses',
-                      onPressed: () {
-                        final packageLicenses = licenseData.data!.packageLicenseBindings[currentPackage]!.map(
-                          (binding) => licenseData.data!.licenses[binding]
-                        ).toList();
-                        showDialog(
-                          context: context,
-                          builder: (context) => LicensesDialog(
-                            currentPackage: currentPackage,
-                            packageLicenses: packageLicenses,
-                          ),
-                        );
-                      },
+          body: SingleChildScrollView(
+            child: licenseData.connectionState == ConnectionState.done ?
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  ...licenseData.data!.packages.map(
+                    (currentPackage) => Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 10.0,
+                      ),
+                      child: SudokGoMenuButton(
+                        width: MediaQuery.of(context).size.width / 1.25,
+                        title: currentPackage,
+                        subtitle: '${licenseData.data!.packageLicenseBindings[currentPackage]!.length} licenses',
+                        onPressed: () {
+                          final packageLicenses = licenseData.data!.packageLicenseBindings[currentPackage]!.map(
+                            (binding) => licenseData.data!.licenses[binding]
+                          ).toList();
+                          showDialog(
+                            context: context,
+                            builder: (context) => LicensesDialog(
+                              currentPackage: currentPackage,
+                              packageLicenses: packageLicenses,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ]
+                ]
+              ),
+            ) :
+            const Center(
+              child: CircularProgressIndicator(),
             ),
-          ) :
-          const Center(
-            child: CircularProgressIndicator(),
           ),
         ),
       );
     });
+  }
+
+  void backOnPressed(BuildContext context) {
+    GoRouter.of(context).go('/options');
   }
 }
