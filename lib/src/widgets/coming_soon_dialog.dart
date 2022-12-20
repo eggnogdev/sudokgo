@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sudokgo/src/widgets/text_button.dart';
 
 class ComingSoonDialog extends StatelessWidget {
   const ComingSoonDialog({super.key, this.title = 'coming soon!',});
@@ -13,24 +14,12 @@ class ComingSoonDialog extends StatelessWidget {
       ),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
-        TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-          ),
-          child: Text(
-            'okay',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary,
-              fontSize: 20.0,
-            ),
-          ),
+        SudokGoTextButton(
+          title: 'okay',
           onPressed: () {
             Navigator.pop(context);
           },
-        ),
+        )
       ],
       title: Text(
         title,

@@ -35,7 +35,7 @@ class HiveWrapper {
     }
   }
 
-  static Future<void> setGame(GameDifficulty difficulty, Game game) async {
+  static Future<void> setGame(GameDifficulty difficulty, Game? game) async {
     final box = getGamesBox();
     await box.put(difficulty.value, game);
   }
