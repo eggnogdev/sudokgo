@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:sudokgo/src/game_screen/game_board.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/game_screen/number_selector.dart';
-import 'package:sudokgo/src/hive/game.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/widgets/sudokgo_app_bar.dart';
 

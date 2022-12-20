@@ -75,10 +75,7 @@ class MainScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.easy;
-                  showDialog(
-                    context: context,
-                    builder: (context) => const ContinueOrNewDialog(),
-                  );
+                  dialogOrGame(context);
                 },
               ),
               SudokGoMenuButton(
@@ -93,10 +90,7 @@ class MainScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.medium;
-                  showDialog(
-                    context: context,
-                    builder: (context) => const ContinueOrNewDialog(),
-                  );
+                  dialogOrGame(context);
                 },
               ),
               SudokGoMenuButton(
@@ -111,10 +105,7 @@ class MainScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.hard;
-                  showDialog(
-                    context: context,
-                    builder: (context) => const ContinueOrNewDialog(),
-                  );
+                  dialogOrGame(context);
                 },
               ),
               const SoloOnlineSwitch(),
@@ -126,5 +117,16 @@ class MainScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void dialogOrGame(BuildContext context) {
+    if (HiveWrapper.getGame(GameSession.selectedDifficulty!) != null) {
+      showDialog(
+        context: context,
+        builder: (context) => const ContinueOrNewDialog(),
+      );
+    } else {
+      GoRouter.of(context).go('/game');
+    }
   }
 }
