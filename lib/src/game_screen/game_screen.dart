@@ -15,18 +15,14 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        await saveGame();
-        GameSession.selectedDifficulty = null;
-        GoRouter.of(context).go('/');
-        return true;
+        backOnPressed(context);
+        return false;
       },
       child: Scaffold(
         appBar: SudokGoAppBar.create(
           title: const Text(''),
           backOnPressed: () async {
-            await saveGame();
-            GameSession.selectedDifficulty = null;
-            GoRouter.of(context).go('/');
+            backOnPressed(context);
           },
           context: context,
         ),
@@ -63,5 +59,11 @@ class GameScreen extends StatelessWidget {
       GameSession.selectedDifficulty!,
       gameSession.game!,
     );
-  }  
+  }
+
+  void backOnPressed(BuildContext context) async {
+    await saveGame();
+    GameSession.selectedDifficulty = null;
+    GoRouter.of(context).go('/');
+  }
 }

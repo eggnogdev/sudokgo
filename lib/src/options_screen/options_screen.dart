@@ -10,93 +10,99 @@ class OptionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: SudokGoAppBar.create(
-        title: Text(
-          'options',
-          style: TextStyle(
-            fontSize: 32.0,
-            color: Theme.of(context).colorScheme.onBackground,
+    return WillPopScope(
+      onWillPop: () async {
+        backOnPressed(context);
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        appBar: SudokGoAppBar.create(
+          title: Text(
+            'options',
+            style: TextStyle(
+              fontSize: 32.0,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
           ),
+          backOnPressed: () {
+            backOnPressed(context);
+          },
+          context: context,
         ),
-        backOnPressed: () {
-          GoRouter.of(context).go('/');
-        },
-        context: context,
-      ),
-      body: SafeArea(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.only(top: 20.0,),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SudokGoMenuButton(
-                    title: 'display name',
-                    subtitle: 'edit your display name',
-                    suffixIcon: const Text(
-                      '>',
-                      style: TextStyle(
-                        fontSize: 48.0,
+        body: SafeArea(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.only(top: 20.0,),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SudokGoMenuButton(
+                      title: 'display name',
+                      subtitle: 'edit your display name',
+                      suffixIcon: const Text(
+                        '>',
+                        style: TextStyle(
+                          fontSize: 48.0,
+                        ),
                       ),
+                      width: MediaQuery.of(context).size.width / 1.25,
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const DisplayNameDialog(),
+                        );
+                      },
                     ),
-                    width: MediaQuery.of(context).size.width / 1.25,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const DisplayNameDialog(),
-                      );
-                    },
-                  ),
-                  gap,
-                  SudokGoMenuButton(
-                    title: 'statistics',
-                    subtitle: 'view your performance',
-                    suffixIcon: SizedBox(
-                      width: 50.0,
-                      child: Image.asset('assets/images/statistics.png'),
+                    gap,
+                    SudokGoMenuButton(
+                      title: 'statistics',
+                      subtitle: 'view your performance',
+                      suffixIcon: SizedBox(
+                        width: 50.0,
+                        child: Image.asset('assets/images/statistics.png'),
+                      ),
+                      width: MediaQuery.of(context).size.width / 1.25,
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const ComingSoonDialog(),
+                        );
+                      },
                     ),
-                    width: MediaQuery.of(context).size.width / 1.25,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const ComingSoonDialog(),
-                      );
-                    },
-                  ),
-                  gap,
-                  SudokGoMenuButton(
-                    title: 'ads preference',
-                    subtitle: 'none',
-                    suffixIcon: SizedBox(
-                      width: 50.0,
-                      child: Image.asset('assets/images/spin_icon.png'),
+                    gap,
+                    SudokGoMenuButton(
+                      title: 'ads preference',
+                      subtitle: 'none',
+                      suffixIcon: SizedBox(
+                        width: 50.0,
+                        child: Image.asset('assets/images/spin_icon.png'),
+                      ),
+                      width: MediaQuery.of(context).size.width / 1.25,
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const ComingSoonDialog(),
+                        );
+                      },
                     ),
-                    width: MediaQuery.of(context).size.width / 1.25,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const ComingSoonDialog(),
-                      );
-                    },
-                  ),
-                  gap,
-                  SudokGoMenuButton(
-                    title: 'licenses',
-                    subtitle: 'open source licenses',
-                    suffixIcon: SizedBox(
-                      width: 50.0,
-                      child: Image.asset('assets/images/licenses.png'),
+                    gap,
+                    SudokGoMenuButton(
+                      title: 'licenses',
+                      subtitle: 'open source licenses',
+                      suffixIcon: SizedBox(
+                        width: 50.0,
+                        child: Image.asset('assets/images/licenses.png'),
+                      ),
+                      width: MediaQuery.of(context).size.width / 1.25,
+                      onPressed: () {
+                        GoRouter.of(context).go('/licenses');
+                      },
                     ),
-                    width: MediaQuery.of(context).size.width / 1.25,
-                    onPressed: () {
-                      GoRouter.of(context).go('/licenses');
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -106,4 +112,8 @@ class OptionsScreen extends StatelessWidget {
   }
 
   final SizedBox gap = const SizedBox(height: 30.0,);
+
+  void backOnPressed(BuildContext context) {
+    GoRouter.of(context).go('/');
+  }
 }
