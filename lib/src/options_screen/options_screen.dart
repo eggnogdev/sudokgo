@@ -83,6 +83,19 @@ class OptionsScreen extends StatelessWidget {
                       );
                     },
                   ),
+                  gap,
+                  SudokGoMenuButton(
+                    title: 'licenses',
+                    subtitle: 'open source licenses',
+                    suffixIcon: SizedBox(
+                      width: 50.0,
+                      child: Image.asset('assets/images/licenses.png'),
+                    ),
+                    width: MediaQuery.of(context).size.width / 1.25,
+                    onPressed: () {
+                      GoRouter.of(context).go('/licenses');
+                    },
+                  ),
                 ],
               ),
             ),

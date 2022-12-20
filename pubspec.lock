@@ -202,6 +202,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_custom_license_page:
+    dependency: "direct main"
+    description:
+      name: flutter_custom_license_page
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -303,6 +310,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.7.0"
+  lint:
+    dependency: transitive
+    description:
+      name: lint
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.10.0"
   lints:
     dependency: transitive
     description:
