@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sudokgo/src/game_screen/game_screen.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
@@ -101,7 +100,7 @@ class SudokGo extends StatelessWidget {
           error: Colors.red[900]!,
           onError: Colors.white,
         ),
-        textTheme: GoogleFonts.indieFlowerTextTheme(),
+        fontFamily: 'IndieFlower',
       ),
       routeInformationProvider: router.routeInformationProvider,
       routeInformationParser: router.routeInformationParser,
