@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sudokgo/src/game_screen/game_box.dart';
 import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
+import 'package:sudokgo/src/game_screen/win_dialog.dart';
 import 'package:sudokgo/src/hive/game.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
@@ -59,6 +60,13 @@ class _GameBoardState extends State<GameBoard> {
                     updateUserSolution(row, col, 0);
                   } else {
                     updateUserSolution(row, col, int.parse(value));
+                  }
+
+                  if (SudokuUtilities.isSolved(widget.gameSession.userSolution.value)) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const WinDialog(),
+                    );
                   }
                 },
                 cells: getBox(i * 3 + j),
