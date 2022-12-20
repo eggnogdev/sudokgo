@@ -5,6 +5,7 @@ import 'package:sudokgo/src/game_screen/game_screen.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/hive/game.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
+import 'package:sudokgo/src/licenses_screen/licenses_screen.dart';
 import 'package:sudokgo/src/main_screen/main_screen.dart';
 import 'package:sudokgo/src/onboarding/onboarding_screen.dart';
 import 'package:sudokgo/src/options_screen/options_screen.dart';
@@ -72,6 +73,14 @@ class SudokGo extends StatelessWidget {
             child: GameScreen(
               gameSession: GameSession(),
             ),
+            context: context,
+            state: state,
+          ),
+        ),
+        GoRoute(
+          path: '/licenses',
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            child: const LicensesScreen(),
             context: context,
             state: state,
           ),
