@@ -51,7 +51,7 @@ android {
     defaultConfig {
         applicationId "com.danielegorov.sudokgo"
         minSdkVersion 20
-        targetSdkVersion 28
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
