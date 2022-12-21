@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sudokgo/src/game_screen/game_screen.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
@@ -13,12 +14,14 @@ import 'package:sudokgo/src/page_transition/page_transition.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
 
   await Hive.initFlutter();
   Hive.registerAdapter(GameAdapter());
   
   await Hive.openBox('user');
   await Hive.openBox('games');
+  await Hive.openBox('preferences');
 
   String initialRoute = '/';
   if (HiveWrapper.getDisplayName() == null) initialRoute = '/onboarding';
