@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/main_screen/continue_or_new_dialog.dart';
 import 'package:sudokgo/src/main_screen/solo_online_switch.dart';
+import 'package:sudokgo/src/monetization/ads_preference.dart';
+import 'package:sudokgo/src/monetization/banner_ad.dart';
 import 'package:sudokgo/src/widgets/menu_button.dart';
 
 class MainScreen extends StatelessWidget {
@@ -15,6 +18,18 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Theme.of(context).colorScheme.background,
+      bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).colorScheme.background,
+        elevation: 0.0,
+        child: SizedBox(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (AdsPreference.current.value == AdsPreference.minimal) const SudokGoBannerAd(),
+            ],
+          ),
+        ),
+      ),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -109,9 +124,7 @@ class MainScreen extends StatelessWidget {
                 },
               ),
               const SoloOnlineSwitch(),
-              const SizedBox(
-                height: 50.0,
-              )
+              const SizedBox(),
             ],
           ),
         ),

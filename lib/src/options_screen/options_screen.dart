@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sudokgo/src/hive/hive_wrapper.dart';
+import 'package:sudokgo/src/monetization/ads_preference.dart';
 import 'package:sudokgo/src/options_screen/display_name_dialog.dart';
 import 'package:sudokgo/src/widgets/coming_soon_dialog.dart';
 import 'package:sudokgo/src/widgets/menu_button.dart';
@@ -73,20 +75,30 @@ class OptionsScreen extends StatelessWidget {
                       },
                     ),
                     gap,
-                    SudokGoMenuButton(
-                      title: 'ads preference',
-                      subtitle: 'none',
-                      suffixIcon: SizedBox(
-                        width: 50.0,
-                        child: Image.asset('assets/images/spin_icon.png'),
-                      ),
-                      width: MediaQuery.of(context).size.width / 1.25,
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => const ComingSoonDialog(),
+                    ValueListenableBuilder<AdsPreference>(
+                      valueListenable: AdsPreference.current,
+                      builder: (context, preference, _) {
+                        return SudokGoMenuButton(
+                          title: 'ads preference',
+                          subtitle: preference.toString(),
+                          suffixIcon: SizedBox(
+                            width: 50.0,
+                            child: Image.asset('assets/images/spin_icon.png'),
+                          ),
+                          width: MediaQuery.of(context).size.width / 1.25,
+                          onPressed: () {
+                            int currentValue = HiveWrapper.getAdsPreference().value;
+                    
+                            if (currentValue == AdsPreference.maxValue) {
+                              AdsPreference.current.value = AdsPreference.none;
+                              HiveWrapper.setAdsPreference(AdsPreference.none);
+                            } else {
+                              AdsPreference.current.value = AdsPreference(currentValue + 1);
+                              HiveWrapper.setAdsPreference(AdsPreference(currentValue + 1));
+                            }
+                          },
                         );
-                      },
+                      }
                     ),
                     gap,
                     SudokGoMenuButton(

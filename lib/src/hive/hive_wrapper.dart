@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 import 'package:sudokgo/src/hive/game.dart';
+import 'package:sudokgo/src/monetization/ads_preference.dart';
 
 class HiveWrapper {
   static Box getUserBox() {
@@ -38,5 +39,22 @@ class HiveWrapper {
   static Future<void> setGame(GameDifficulty difficulty, Game? game) async {
     final box = getGamesBox();
     await box.put(difficulty.value, game);
+  }
+
+  static Box getPreferencesBox() {
+    return Hive.box('preferences');
+  }
+
+  static AdsPreference getAdsPreference() {
+    final box = getPreferencesBox();
+    int? value = box.get('ads');
+    if (value == null) return const AdsPreference(0);
+
+    return AdsPreference(value);
+  }
+
+  static Future<void> setAdsPreference(AdsPreference preference) async {
+    final box = getPreferencesBox();
+    await box.put('ads', preference.value);
   }
 }
