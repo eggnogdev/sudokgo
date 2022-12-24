@@ -29,3 +29,4 @@ https://ko-fi.com/egorov
 <a href="https://www.flaticon.com/free-icons/profit" title="profit icons">Profit icons created by smashingstocks - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/menu" title="menu icons">Menu icons created by FlexSolution - Flaticon</a>
 <a href="https://www.flaticon.com/free-icons/paper" title="paper icons">Paper icons created by smashingstocks - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/info" title="info icons">Info icons created by smashingstocks - Flaticon</a>

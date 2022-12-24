@@ -18,26 +18,14 @@ class _DisplayNameDialogState extends State<DisplayNameDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text(
-            'enter a new display name',
-            style: TextStyle(
-              fontSize: 20.0,
-            ),
-          ),
-          const SizedBox(height: 10.0,),
-          SudokGoTextField(
-            enterOnPressed: () {
-              if (controller.value.text == '') return;
-              HiveWrapper.setDisplayName(controller.value.text);
-              Navigator.pop(context);
-            },
-            controller: controller,
-          ),
-        ],
+      title: SudokGoTextField(
+        title: 'enter a new display name',
+        suffixButtonOnPressed: () {
+          if (controller.value.text == '') return;
+          HiveWrapper.setDisplayName(controller.value.text);
+          Navigator.pop(context);
+        },
+        controller: controller,
       ),
     );
   }
