@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sudokgo/src/api/api.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/monetization/ads_preference.dart';
+import 'package:sudokgo/src/online/online_status.dart';
 import 'package:sudokgo/src/options_screen/display_name_dialog.dart';
+import 'package:sudokgo/src/options_screen/login_dialog.dart';
 import 'package:sudokgo/src/widgets/coming_soon_dialog.dart';
 import 'package:sudokgo/src/widgets/menu_button.dart';
 import 'package:sudokgo/src/widgets/sudokgo_app_bar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class OptionsScreen extends StatelessWidget {
   const OptionsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width / 1.25;
+    final Session? session = SudokGoApi.session();
+
     return WillPopScope(
       onWillPop: () async {
         backOnPressed(context);
@@ -50,7 +57,7 @@ class OptionsScreen extends StatelessWidget {
                           fontSize: 48.0,
                         ),
                       ),
-                      width: MediaQuery.of(context).size.width / 1.25,
+                      width: width,
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -66,7 +73,7 @@ class OptionsScreen extends StatelessWidget {
                         width: 50.0,
                         child: Image.asset('assets/images/statistics.png'),
                       ),
-                      width: MediaQuery.of(context).size.width / 1.25,
+                      width: width,
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -85,7 +92,7 @@ class OptionsScreen extends StatelessWidget {
                             width: 50.0,
                             child: Image.asset('assets/images/spin_icon.png'),
                           ),
-                          width: MediaQuery.of(context).size.width / 1.25,
+                          width: width,
                           onPressed: () {
                             int currentValue = HiveWrapper.getAdsPreference().value;
                     
@@ -101,6 +108,34 @@ class OptionsScreen extends StatelessWidget {
                       }
                     ),
                     gap,
+                    session == null ? SudokGoMenuButton(
+                      width: width,
+                      title: 'login',
+                      subtitle: 'access online features',
+                      suffixIcon: const Icon(
+                        Icons.login_rounded,
+                        size: 40.0,
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const LoginDialog(),
+                        );
+                      },
+                    ) : SudokGoMenuButton(
+                      width: width,
+                      title: 'logout',
+                      subtitle: 'only play solo',
+                      suffixIcon: const Icon(
+                        Icons.logout_rounded,
+                        size: 40.0,
+                      ),
+                      onPressed: () {
+                        SudokGoApi.logout().then((value) => GoRouter.of(context).go('/'));
+                        OnlineStatus.online.value = false;
+                      },
+                    ),
+                    gap,
                     SudokGoMenuButton(
                       title: 'licenses',
                       subtitle: 'open source licenses',
@@ -108,7 +143,7 @@ class OptionsScreen extends StatelessWidget {
                         width: 50.0,
                         child: Image.asset('assets/images/licenses.png'),
                       ),
-                      width: MediaQuery.of(context).size.width / 1.25,
+                      width: width,
                       onPressed: () {
                         GoRouter.of(context).go('/licenses');
                       },

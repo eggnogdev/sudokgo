@@ -12,4 +12,12 @@ class SudokGoApi {
       emailRedirectTo: 'com.danielegorov.sudokgo://login-callback/',
     );
   }
+
+  static Session? session() {
+    return supabase.auth.currentSession;
+  }
+
+  static Future<void> logout() async {
+    await supabase.auth.signOut();
+  }
 }

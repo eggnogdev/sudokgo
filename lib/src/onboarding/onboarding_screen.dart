@@ -37,7 +37,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     authStateSubscription = SudokGoApi.supabase.auth.onAuthStateChange.listen((data) {
-      log('auth state changed');
       if (redirecting) return;
       final session = data.session;
       if (session != null) {
