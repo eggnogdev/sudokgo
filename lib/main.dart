@@ -11,6 +11,7 @@ import 'package:sudokgo/src/main_screen/main_screen.dart';
 import 'package:sudokgo/src/onboarding/onboarding_screen.dart';
 import 'package:sudokgo/src/options_screen/options_screen.dart';
 import 'package:sudokgo/src/page_transition/page_transition.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,11 @@ void main() async {
   await Hive.openBox('user');
   await Hive.openBox('games');
   await Hive.openBox('preferences');
+
+  await Supabase.initialize(
+    url: 'https://cgpnihdkmtdsyhullueq.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNncG5paGRrbXRkc3lodWxsdWVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzE2Njg2MzEsImV4cCI6MTk4NzI0NDYzMX0.cWdiGW5zkYMVBmyiwEiKgxE4XhmIL88WCju6-QN1p8k',
+  );
 
   String initialRoute = '/';
   if (HiveWrapper.getDisplayName() == null) initialRoute = '/onboarding';
