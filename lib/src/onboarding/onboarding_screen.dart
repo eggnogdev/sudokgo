@@ -107,13 +107,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   showSuffixButton: true,
                   suffixButtonIcon: loading ? const CircularProgressIndicator() : null,
                   suffixButtonOnPressed: loading ? null : () {
+                    setState(() {
+                      emailSubText = '';
+                    });
                     if (emailController.text == '') {
                       GoRouter.of(context).go('/');
                     } else {
-                      setState(() {
-                        emailSubText = 'login link sent to email!';
-                        emailSubTextError = false;
-                      });
                       login(emailController.text);
                     }
                   },
@@ -161,8 +160,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {
       loading = true;
     });
+
     try {
       await SudokGoApi.login(email);
+      setState(() {
+        emailSubText = 'login link sent to email!';
+      });
     } on AuthException catch (error) {
       setState(() {
         emailSubText = error.message;
@@ -174,7 +177,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         emailSubTextError = true;
       });
     }
-    
+
     setState(() {
       loading = false;
     });

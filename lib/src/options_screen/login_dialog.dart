@@ -19,6 +19,7 @@ class _LoginDialogState extends State<LoginDialog> {
   String subText = '';
   bool subTextIsError = false;
   bool redirecting = false;
+  bool loading = false;
   late StreamSubscription<AuthState> authStateSubscription;
 
   @override
@@ -49,12 +50,12 @@ class _LoginDialogState extends State<LoginDialog> {
       content: SudokGoTextField(
         controller: controller,
         title: 'email address',
-        suffixButtonOnPressed: () {
+        suffixButtonIcon: loading ? const CircularProgressIndicator() : null,
+        suffixButtonOnPressed: loading ? null : () {
+          setState(() {
+            subText = '';
+          });
           if (controller.text != '') {
-            setState(() {
-              subText = 'login link sent to email!';
-              subTextIsError = false;
-            });
             login(controller.text);
           }
         },
@@ -65,8 +66,14 @@ class _LoginDialogState extends State<LoginDialog> {
   }
 
   Future<void> login(String email) async {
+    setState(() {
+      loading = true;
+    });
     try {
       await SudokGoApi.login(email);
+      setState(() {
+        subText = 'login link sent to email!';
+      });
     } on AuthException catch (error) {
       setState(() {
         subText = error.message;
@@ -78,5 +85,8 @@ class _LoginDialogState extends State<LoginDialog> {
         subTextIsError = true;
       });
     }
+    setState(() {
+      loading = false;
+    });
   }
 }
