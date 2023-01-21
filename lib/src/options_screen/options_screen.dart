@@ -6,6 +6,7 @@ import 'package:sudokgo/src/monetization/ads_preference.dart';
 import 'package:sudokgo/src/online/online_status.dart';
 import 'package:sudokgo/src/options_screen/display_name_dialog.dart';
 import 'package:sudokgo/src/options_screen/login_dialog.dart';
+import 'package:sudokgo/src/sudokgo_functions/show_snackbar.dart';
 import 'package:sudokgo/src/widgets/coming_soon_dialog.dart';
 import 'package:sudokgo/src/widgets/menu_button.dart';
 import 'package:sudokgo/src/widgets/sudokgo_app_bar.dart';
@@ -91,7 +92,11 @@ class OptionsScreen extends StatelessWidget {
                       ),
                       width: width,
                       onPressed: () {
-                        GoRouter.of(context).push('/options/friend_requests');
+                        if (SudokGoApi.session() == null) {
+                          showSnackBar('login to use friend features', context);
+                        } else {
+                          GoRouter.of(context).push('/options/friend_requests');
+                        }
                       },
                     ),
                     gap,
