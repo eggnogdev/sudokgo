@@ -61,8 +61,18 @@ class _GameBoardState extends State<GameBoard> {
                   } else {
                     updateUserSolution(row, col, int.parse(value));
                   }
+                  
+                  bool isSolved = false;
 
-                  if (SudokuUtilities.isSolved(widget.gameSession.userSolution.value)) {
+                  try {
+                    isSolved = SudokuUtilities.isSolved(widget.gameSession.userSolution.value);
+                  } catch (e) {
+                    /// instead of returning false for some reason this library
+                    /// likes to throw an Exception instead therefore this
+                    /// ugly try/catch block must be made
+                  }
+
+                  if (isSolved) {
                     showDialog(
                       context: context,
                       builder: (context) => const WinDialog(),
