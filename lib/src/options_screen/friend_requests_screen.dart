@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sudokgo/src/options_screen/text_input_dialog.dart';
 import 'package:sudokgo/src/widgets/sudokgo_app_bar.dart';
 
 class FriendRequestsScreen extends StatefulWidget {
@@ -42,7 +43,15 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> with Single
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => TextInputDialog(
+              prompt: 'enter your friend\'s email',
+              onSubmit: (text) {},
+            ),
+          );
+        },
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         child: const Icon(
