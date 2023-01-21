@@ -82,6 +82,19 @@ class OptionsScreen extends StatelessWidget {
                       },
                     ),
                     gap,
+                    SudokGoMenuButton(
+                      title: 'friend requests',
+                      subtitle: 'accept or receive requests',
+                      suffixIcon: SizedBox(
+                        width: 50.0,
+                        child: Image.asset('assets/images/add_friend.png'),
+                      ),
+                      width: width,
+                      onPressed: () {
+                        GoRouter.of(context).push('/options/friend_requests');
+                      },
+                    ),
+                    gap,
                     ValueListenableBuilder<AdsPreference>(
                       valueListenable: AdsPreference.current,
                       builder: (context, preference, _) {

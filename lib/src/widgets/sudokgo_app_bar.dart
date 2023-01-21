@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class SudokGoAppBar {
-  static AppBar create({required Text title, required Function() backOnPressed, required BuildContext context,}) {
+  static AppBar create({required Widget title, required Function() backOnPressed, required BuildContext context, PreferredSizeWidget? bottom,}) {
     return AppBar(
       title: title,
       centerTitle: true,
       backgroundColor: Theme.of(context).colorScheme.background,
       elevation: 0.0,
+      bottom: bottom,
       leading: Padding(
         padding: const EdgeInsets.only(
           top: 5.0,
