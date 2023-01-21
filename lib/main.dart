@@ -11,7 +11,7 @@ import 'package:sudokgo/src/main_screen/main_screen.dart';
 import 'package:sudokgo/src/onboarding/onboarding_screen.dart';
 import 'package:sudokgo/src/options_screen/friend_requests_screen.dart';
 import 'package:sudokgo/src/options_screen/options_screen.dart';
-import 'package:sudokgo/src/page_transition/page_transition.dart';
+import 'package:sudokgo/src/sudokgo_functions/page_transition.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {

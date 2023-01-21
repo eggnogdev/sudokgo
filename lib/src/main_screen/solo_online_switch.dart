@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_switch/sliding_switch.dart';
 import 'package:sudokgo/src/api/api.dart';
 import 'package:sudokgo/src/online/online_status.dart';
+import 'package:sudokgo/src/sudokgo_functions/show_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SoloOnlineSwitch extends StatelessWidget {
@@ -28,43 +29,16 @@ class SoloOnlineSwitch extends StatelessWidget {
           },
           disabled: session == null,
           disabledOnTap: () {
-            showSnackBar(context);
+            showSnackBar('you must login to play online', context);
           },
           disabledOnDoubleTap: () {
-            showSnackBar(context);
+            showSnackBar('you must login to play online', context);
           },
           disabledOnSwipe: () {
-            showSnackBar(context);
+            showSnackBar('you must login to play online', context);
           },
         );
       }
-    );
-  }
-
-  void showSnackBar(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        elevation: 10.0,
-        dismissDirection: DismissDirection.down,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'you must login to play online',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontFamily: 'IndieFlower',
-                fontSize: 18.0,
-              ),
-            ),
-          ],
-        ),
-      )
     );
   }
 }
