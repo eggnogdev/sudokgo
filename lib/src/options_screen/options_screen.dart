@@ -4,8 +4,8 @@ import 'package:sudokgo/src/api/api.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/monetization/ads_preference.dart';
 import 'package:sudokgo/src/online/online_status.dart';
-import 'package:sudokgo/src/options_screen/display_name_dialog.dart';
 import 'package:sudokgo/src/options_screen/login_dialog.dart';
+import 'package:sudokgo/src/options_screen/text_input_dialog.dart';
 import 'package:sudokgo/src/sudokgo_functions/show_snackbar.dart';
 import 'package:sudokgo/src/widgets/coming_soon_dialog.dart';
 import 'package:sudokgo/src/widgets/menu_button.dart';
@@ -62,7 +62,14 @@ class OptionsScreen extends StatelessWidget {
                       onPressed: () {
                         showDialog(
                           context: context,
-                          builder: (context) => const DisplayNameDialog(),
+                          builder: (context) => TextInputDialog(
+                            prompt: 'enter a new display name',
+                            onSubmit: (text) {
+                              if (text == '') return;
+                              HiveWrapper.setDisplayName(text);
+                              Navigator.pop(context);
+                            },
+                          ),
                         );
                       },
                     ),
