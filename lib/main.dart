@@ -9,6 +9,7 @@ import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/licenses_screen/licenses_screen.dart';
 import 'package:sudokgo/src/main_screen/main_screen.dart';
 import 'package:sudokgo/src/onboarding/onboarding_screen.dart';
+import 'package:sudokgo/src/options_screen/friend_requests_screen.dart';
 import 'package:sudokgo/src/options_screen/options_screen.dart';
 import 'package:sudokgo/src/page_transition/page_transition.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -75,6 +76,16 @@ class SudokGo extends StatelessWidget {
             context: context,
             state: state,
           ),
+          routes: [
+            GoRoute(
+              path: 'friend_requests',
+              pageBuilder: (context, state) => buildPageWithDefaultTransition(
+                child: const FriendRequestsScreen(),
+                context: context,
+                state: state,
+              ),
+            ),
+          ]
         ),
         GoRoute(
           path: '/game',
