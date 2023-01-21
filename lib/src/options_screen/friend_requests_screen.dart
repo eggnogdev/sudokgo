@@ -21,6 +21,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> with Single
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: SudokGoAppBar.create(
         context: context,
         title: Text(
@@ -33,31 +34,20 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> with Single
         backOnPressed: () {
           GoRouter.of(context).pop();
         },
-        bottom: TabBar(
-          indicatorColor: Theme.of(context).colorScheme.primary,
-          controller: controller,
-          labelColor: Theme.of(context).colorScheme.onBackground,
-          labelStyle: TextStyle(
-            fontSize: 20.0,
-            fontFamily: 'IndieFlower'
-          ),
-          tabs: const [
-            Tab(
-              text: 'incoming',
-            ),
-            Tab(
-              text: 'outgoing',
-            ),
-          ],
-        )
       ),
       body: SafeArea(
-        child: TabBarView(
-          controller: controller,
-          children: [
-            Container(color: Colors.red,),
-            Container(color: Colors.orange,)
-          ],
+        child: ListView(
+          children: const [],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        child: const Icon(
+          Icons.add_rounded,
+          size: 35.0,
         ),
       ),
     );
