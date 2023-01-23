@@ -24,11 +24,12 @@ class _LoginDialogState extends State<LoginDialog> {
 
   @override
   void initState() {
-    authStateSubscription = SudokGoApi.supabase.auth.onAuthStateChange.listen((data) {
+    authStateSubscription = SudokGoApi.supabase.auth.onAuthStateChange.listen((data) async {
       if (redirecting) return;
       final session = data.session;
       if (session != null) {
         redirecting = true;
+        SudokGoApi.upsertUserRow();
         GoRouter.of(context).go('/');
       }
     });
@@ -81,7 +82,7 @@ class _LoginDialogState extends State<LoginDialog> {
       });
     } catch (error) {
       setState(() {
-        subText = 'Unexpected error';
+        subText = error.toString();
         subTextIsError = true;
       });
     }

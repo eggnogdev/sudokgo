@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -36,11 +35,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   void initState() {
-    authStateSubscription = SudokGoApi.supabase.auth.onAuthStateChange.listen((data) {
+    authStateSubscription = SudokGoApi.supabase.auth.onAuthStateChange.listen((data) async {
       if (redirecting) return;
       final session = data.session;
       if (session != null) {
         redirecting = true;
+        SudokGoApi.upsertUserRow();
         GoRouter.of(context).go('/');
       }
     });
