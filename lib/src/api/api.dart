@@ -1,4 +1,5 @@
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
+import 'package:sudokgo/src/types/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SudokGoApi {
@@ -36,5 +37,46 @@ class SudokGoApi {
         'email': supabase.auth.currentUser?.email,
         'display_name': HiveWrapper.getDisplayName(),
       });
+  }
+
+  static Future<void> addFriend(String email) async {
+    /// TODO: add check for block, pending, or accepted and dont send request 
+    /// if any of those statuses exist
+    
+    final query = await supabase.from('users')
+      .select<List<Map<String, dynamic>>>('id')
+      .eq('email', email);
+
+    if (query.isEmpty) {
+      throw UserNotFoundException('this user does not exist');
+    }
+
+    final otherUserId = query[0]['id'];
+
+    await supabase.from('friendships')
+      .insert({
+        'source_user_id': supabase.auth.currentUser?.id,
+        'target_user_id': otherUserId,
+        'status': FriendshipStatus.pending.value,
+      });
+  }
+}
+
+class SudokGoException implements Exception {
+  final String msg;
+  SudokGoException(this.msg);
+
+  @override
+  String toString() {
+    return 'SudokGoException: $msg';
+  }
+}
+
+class UserNotFoundException extends SudokGoException {
+  UserNotFoundException(super.msg);
+
+  @override
+  String toString() {
+    return 'SudokGoException: UserNotFound: $msg';
   }
 }
