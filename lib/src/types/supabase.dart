@@ -11,6 +11,7 @@ class FriendshipStatus {
   final int value;
   const FriendshipStatus._(this.value);
 
+  static FriendshipStatus get none => const FriendshipStatus._(-1);
   static FriendshipStatus get blocked => const FriendshipStatus._(0);
   static FriendshipStatus get pending => const FriendshipStatus._(1);
   static FriendshipStatus get accepted => const FriendshipStatus._(2);

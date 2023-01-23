@@ -35,13 +35,18 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
             subTextIsError = false;
             loading = true;
           });
-          if (controller.text != '') {
+          final String input = controller.text.trim();
+          if (input != '') {
             try {
-              await SudokGoApi.addFriend(controller.text);
+              await SudokGoApi.addFriend(input);
               setState(() {
                 subText = 'friend request sent';
               });
-            } on UserNotFoundException catch (error) {
+            } on YouAreYourOwnBestFriendException catch (error) {
+              setState(() {
+                subText = error.msg;
+              });
+            } on SudokGoException catch (error) {
               setState(() {
                 subText = error.msg;
                 subTextIsError = true;
