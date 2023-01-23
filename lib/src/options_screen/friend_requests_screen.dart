@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sudokgo/src/options_screen/text_input_dialog.dart';
+import 'package:sudokgo/src/options_screen/add_friend_dialog.dart';
 import 'package:sudokgo/src/widgets/sudokgo_app_bar.dart';
 
 class FriendRequestsScreen extends StatefulWidget {
@@ -11,14 +11,6 @@ class FriendRequestsScreen extends StatefulWidget {
 }
 
 class _FriendRequestsScreenState extends State<FriendRequestsScreen> with SingleTickerProviderStateMixin {
-  late TabController controller;
-  
-  @override
-  void initState() {
-    controller = TabController(length: 2, vsync: this);
-    super.initState();
-  }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,10 +38,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> with Single
         onPressed: () {
           showDialog(
             context: context,
-            builder: (context) => TextInputDialog(
-              prompt: 'enter your friend\'s email',
-              onSubmit: (text) {},
-            ),
+            builder: (context) => const AddFriendDialog()
           );
         },
         backgroundColor: Theme.of(context).colorScheme.primary,
