@@ -40,9 +40,6 @@ class SudokGoApi {
   }
 
   static Future<void> addFriend(String email) async {
-    /// TODO: add check for block, pending, or accepted and dont send request 
-    /// if any of those statuses exist
-    
     if (email == supabase.auth.currentUser?.email) {
       throw YouAreYourOwnBestFriendException('you are your own best friend :)');
     }
