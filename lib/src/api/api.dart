@@ -54,10 +54,10 @@ class SudokGoApi {
 
     // ignore: unrelated_type_equality_checks
     if (FriendshipStatus.blocked == existingStatus) {
-      throw UserNotFoundException('this user does not exist');
+      throw UserNotFoundException('user does not exist');
     // ignore: unrelated_type_equality_checks
     } else if (FriendshipStatus.pending == existingStatus) {
-      throw RelationshipAlreadyExistsException('already sent a request');
+      throw RelationshipAlreadyExistsException('already pending');
     // ignore: unrelated_type_equality_checks
     } else if (FriendshipStatus.accepted == existingStatus) {
       throw RelationshipAlreadyExistsException('already friends');
