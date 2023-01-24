@@ -91,8 +91,8 @@ class OptionsScreen extends StatelessWidget {
                     ),
                     gap,
                     SudokGoMenuButton(
-                      title: 'friend requests',
-                      subtitle: 'accept or receive requests',
+                      title: 'friends',
+                      subtitle: 'view, request, and accept',
                       suffixIcon: SizedBox(
                         width: 50.0,
                         child: Image.asset('assets/images/add_friend.png'),

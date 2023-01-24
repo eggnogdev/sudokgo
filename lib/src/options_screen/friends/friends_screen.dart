@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sudokgo/src/options_screen/friend_requests/add_friend_dialog.dart';
+import 'package:sudokgo/src/options_screen/friends/add_friend_dialog.dart';
 import 'package:sudokgo/src/widgets/sudokgo_app_bar.dart';
 
 import 'bottom_button.dart';
@@ -20,7 +20,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> with Single
       appBar: SudokGoAppBar.create(
         context: context,
         title: Text(
-          'friend requests',
+          'friends',
           style: TextStyle(
             fontSize: 32.0,
             color: Theme.of(context).colorScheme.onBackground
@@ -60,7 +60,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> with Single
           children: [
             BottomButton(
               onPressed: () {},
-              text: 'all',
+              text: 'accepted',
             ),
             BottomButton(
               onPressed: () {},
