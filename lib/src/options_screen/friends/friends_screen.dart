@@ -50,8 +50,8 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
       body: SafeArea(
         child: RefreshIndicator(
           key: refreshKey,
-          color: Theme.of(context).colorScheme.primaryContainer,
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           onRefresh: onRefresh,
           child: relationships.isNotEmpty || refreshing ? ListView.builder(
             itemCount: relationships.length,
@@ -112,18 +112,21 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
         child: Row(
           children: [
             BottomButton(
+              disabled: showingStatus == FriendshipStatus.accepted,
               onPressed: () {
                 onStatusPressed(FriendshipStatus.accepted);
               },
               text: 'accepted',
             ),
             BottomButton(
+              disabled: showingStatus == FriendshipStatus.pending,
               onPressed: () {
                 onStatusPressed(FriendshipStatus.pending);
               },
               text: 'pending',
             ),
             BottomButton(
+              disabled: showingStatus == FriendshipStatus.blocked,
               onPressed: () {
                 onStatusPressed(FriendshipStatus.blocked);
               },
@@ -136,10 +139,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
   }
 
   void onStatusPressed(FriendshipStatus status) {
-    /// dont actually refresh if already refreshing or already showing the same
-    /// list, user can force the refresh on the same page simply by dragging down
-    /// from the top of the screen
-    if (showingStatus == status || refreshing) return;
+    if (refreshing) return;
     showingStatus = status;
     refreshKey.currentState?.show();
   }
