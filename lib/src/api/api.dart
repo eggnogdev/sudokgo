@@ -94,6 +94,29 @@ class SudokGoApi {
     
     return query.isEmpty ? null : query[0]['id'];
   }
+
+  static Future<List<Map<String, dynamic>>> fetchFriendsByStatus(FriendshipStatus status) async {
+    final String? id = supabase.auth.currentUser?.id;
+    final List<Map<String, dynamic>> res = [];
+
+    if (status != FriendshipStatus.blocked) {
+      res.addAll(await supabase.from('friendships')
+        .select<List<Map<String, dynamic>>>('*,users!friendships_source_user_id_fkey(*)')
+        .match({
+          'target_user_id': id,
+          'status': status.value,
+        }));
+    }
+
+    res.addAll(await supabase.from('friendships')
+      .select<List<Map<String, dynamic>>>('*,users!friendships_target_user_id_fkey(*)')
+      .match({
+        'source_user_id': id,
+        'status': status.value,
+      }));
+
+    return res;
+  }
 }
 
 class SudokGoException implements Exception {
