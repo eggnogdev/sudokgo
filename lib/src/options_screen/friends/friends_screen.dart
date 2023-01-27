@@ -19,15 +19,15 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
   List<Map<String, dynamic>> relationships = [];
   final refreshKey = GlobalKey<RefreshIndicatorState>();
   FriendshipStatus showingStatus = FriendshipStatus.accepted;
+  bool refreshing = true;
 
   @override
   void initState() {
-    super.initState();
-
-    // without Future.delayed() the function will simply not run, odd
-    Future.delayed(const Duration(), () {
+    // call the refresh once the page is first built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       refreshKey.currentState?.show();
     });
+    super.initState();
   }
 
   @override
@@ -53,7 +53,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
           color: Theme.of(context).colorScheme.primaryContainer,
           backgroundColor: Theme.of(context).colorScheme.surface,
           onRefresh: onRefresh,
-          child: ListView.builder(
+          child: relationships.isNotEmpty || refreshing ? ListView.builder(
             itemCount: relationships.length,
             itemBuilder: (context, index) {
               final current = relationships[index];
@@ -78,6 +78,13 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
                 return const SizedBox();
               }
             }
+          ) : Center(
+            child: Text(
+              'nothing to see here! :)',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onBackground,
+              ),
+            ),
           ),
         ),
       ),
@@ -129,15 +136,22 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
   }
 
   void onStatusPressed(FriendshipStatus status) {
-    if (showingStatus == status) return;
+    /// dont actually refresh if already refreshing or already showing the same
+    /// list, user can force the refresh on the same page simply by dragging down
+    /// from the top of the screen
+    if (showingStatus == status || refreshing) return;
     showingStatus = status;
     refreshKey.currentState?.show();
   }
 
   Future<void> onRefresh() async {
+    setState(() {
+      refreshing = true;
+    });
     final res = await SudokGoApi.fetchFriendsByStatus(showingStatus);
     setState(() {
       relationships = res;
+      refreshing = false;
     });
   }
 }
