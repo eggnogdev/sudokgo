@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sudokgo/src/api/api.dart';
 import 'package:sudokgo/src/options_screen/friends/add_friend_dialog.dart';
+import 'package:sudokgo/src/options_screen/friends/friend_list_item.dart';
+import 'package:sudokgo/src/types/supabase.dart';
 import 'package:sudokgo/src/widgets/sudokgo_app_bar.dart';
 
 import 'bottom_button.dart';
@@ -12,7 +15,21 @@ class FriendRequestsScreen extends StatefulWidget {
   State<FriendRequestsScreen> createState() => _FriendRequestsScreenState();
 }
 
-class _FriendRequestsScreenState extends State<FriendRequestsScreen> with SingleTickerProviderStateMixin {
+class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
+  List<Map<String, dynamic>> relationships = [];
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
+  FriendshipStatus showingStatus = FriendshipStatus.accepted;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // without Future.delayed() the function will simply not run, odd
+    Future.delayed(const Duration(), () {
+      refreshKey.currentState?.show();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,8 +48,37 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> with Single
         },
       ),
       body: SafeArea(
-        child: ListView(
-          children: const [],
+        child: RefreshIndicator(
+          key: refreshKey,
+          color: Theme.of(context).colorScheme.primaryContainer,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          onRefresh: onRefresh,
+          child: ListView.builder(
+            itemCount: relationships.length,
+            itemBuilder: (context, index) {
+              final current = relationships[index];
+              if (current['source_user_id'] == SudokGoApi.supabase.auth.currentUser?.id) {
+                return FriendListItem(
+                  displayName: current['users']['display_name'],
+                  email: current['users']['email'],
+                  rightButtonText: 'cancel',
+                  rightButtonOnPressed: () {},
+                );
+              } else if (current['target_user_id'] == SudokGoApi.supabase.auth.currentUser?.id) {
+                return FriendListItem(
+                  displayName: current['users']['display_name'],
+                  email: current['users']['email'],
+                  rightButtonText: 'accept',
+                  rightButtonIsPrimary: true,
+                  rightButtonOnPressed: () {},
+                  leftButtonText: 'decline',
+                  leftButtonOnPressed: () {},
+                );
+              } else {
+                return const SizedBox();
+              }
+            }
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -59,20 +105,39 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> with Single
         child: Row(
           children: [
             BottomButton(
-              onPressed: () {},
+              onPressed: () {
+                onStatusPressed(FriendshipStatus.accepted);
+              },
               text: 'accepted',
             ),
             BottomButton(
-              onPressed: () {},
+              onPressed: () {
+                onStatusPressed(FriendshipStatus.pending);
+              },
               text: 'pending',
             ),
             BottomButton(
-              onPressed: () {},
+              onPressed: () {
+                onStatusPressed(FriendshipStatus.blocked);
+              },
               text: 'blocked',
             ),
           ],
         ),
       ),
     );
+  }
+
+  void onStatusPressed(FriendshipStatus status) {
+    if (showingStatus == status) return;
+    showingStatus = status;
+    refreshKey.currentState?.show();
+  }
+
+  Future<void> onRefresh() async {
+    final res = await SudokGoApi.fetchFriendsByStatus(showingStatus);
+    setState(() {
+      relationships = res;
+    });
   }
 }
