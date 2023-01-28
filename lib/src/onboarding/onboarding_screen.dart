@@ -40,8 +40,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       final session = data.session;
       if (session != null) {
         redirecting = true;
-        SudokGoApi.upsertUserRow();
-        GoRouter.of(context).go('/');
+        SudokGoApi.upsertUserRow().then((_) => GoRouter.of(context).go('/'));
       }
     });
     super.initState();
