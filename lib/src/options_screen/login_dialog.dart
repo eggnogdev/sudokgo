@@ -55,6 +55,7 @@ class _LoginDialogState extends State<LoginDialog> {
         suffixButtonOnPressed: loading ? null : () {
           if (mounted) setState(() {
             subText = '';
+            subTextIsError = false;
           });
           if (controller.text != '') {
             login(controller.text);
