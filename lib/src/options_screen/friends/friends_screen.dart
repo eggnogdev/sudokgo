@@ -48,44 +48,60 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
         },
       ),
       body: SafeArea(
-        child: RefreshIndicator(
-          key: refreshKey,
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          onRefresh: onRefresh,
-          child: relationships.isNotEmpty || refreshing ? ListView.builder(
-            itemCount: relationships.length,
-            itemBuilder: (context, index) {
-              final current = relationships[index];
-              if (current['source_user_id'] == SudokGoApi.supabase.auth.currentUser?.id) {
-                return FriendListItem(
-                  displayName: current['users']['display_name'],
-                  email: current['users']['email'],
-                  rightButtonText: 'cancel',
-                  rightButtonOnPressed: () {},
-                );
-              } else if (current['target_user_id'] == SudokGoApi.supabase.auth.currentUser?.id) {
-                return FriendListItem(
-                  displayName: current['users']['display_name'],
-                  email: current['users']['email'],
-                  rightButtonText: 'accept',
-                  rightButtonIsPrimary: true,
-                  rightButtonOnPressed: () {},
-                  leftButtonText: 'decline',
-                  leftButtonOnPressed: () {},
-                );
-              } else {
-                return const SizedBox();
-              }
-            }
-          ) : Center(
-            child: Text(
-              'nothing to see here! :)',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onBackground,
+        child: Stack(
+          children: [
+            Center(
+              child: Text(
+                'nothing to see here! :)',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
               ),
             ),
-          ),
+            RefreshIndicator(
+              key: refreshKey,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              onRefresh: onRefresh,
+              child: Container(
+                color: relationships.isNotEmpty || refreshing ?
+                  Theme.of(context).colorScheme.background :
+                  Colors.transparent,
+                child: ListView.builder(
+                  itemCount: relationships.length,
+                  itemBuilder: (context, index) {
+                    final current = relationships[index];
+                    if (current['source_user_id'] == SudokGoApi.supabase.auth.currentUser?.id) {
+                      return FriendListItem(
+                        displayName: current['users']['display_name'],
+                        email: current['users']['email'],
+                        rightButtonText: 'cancel',
+                        rightButtonOnPressed: () {
+                          SudokGoApi.removeRelationship(current['users']['id']);
+                        },
+                      );
+                    } else if (current['target_user_id'] == SudokGoApi.supabase.auth.currentUser?.id) {
+                      return FriendListItem(
+                        displayName: current['users']['display_name'],
+                        email: current['users']['email'],
+                        rightButtonText: 'accept',
+                        rightButtonIsPrimary: true,
+                        rightButtonOnPressed: () {
+                          SudokGoApi.acceptPendingRelationship(current['users']['id']);
+                        },
+                        leftButtonText: 'decline',
+                        leftButtonOnPressed: () {
+                          SudokGoApi.removeRelationship(current['users']['id']);
+                        },
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  }
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
