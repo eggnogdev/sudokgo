@@ -10,7 +10,7 @@ class SudokGoApi {
 
   static Future<void> login(String email) async {
     await supabase.auth.signInWithOtp(
-      email: email,
+      email: email.trim(),
       shouldCreateUser: true,
       emailRedirectTo: 'com.danielegorov.sudokgo://login-callback/',
     );
