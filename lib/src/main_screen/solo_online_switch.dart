@@ -29,13 +29,22 @@ class SoloOnlineSwitch extends StatelessWidget {
           },
           disabled: session == null,
           disabledOnTap: () {
-            showSnackBar('you must login to play online', context);
+            showSnackBar(
+              context: context,
+              text: 'you must login to play online',
+            );
           },
           disabledOnDoubleTap: () {
-            showSnackBar('you must login to play online', context);
+            showSnackBar(
+              context: context,
+              text: 'you must login to play online',
+            );
           },
           disabledOnSwipe: () {
-            showSnackBar('you must login to play online', context);
+            showSnackBar(
+              context: context,
+              text: 'you must login to play online',
+            );
           },
         );
       }

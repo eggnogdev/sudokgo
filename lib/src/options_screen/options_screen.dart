@@ -100,7 +100,10 @@ class OptionsScreen extends StatelessWidget {
                       width: width,
                       onPressed: () {
                         if (SudokGoApi.session() == null) {
-                          showSnackBar('login to use friend features', context);
+                          showSnackBar(
+                            context: context,
+                            text: 'login to use friend features',
+                          );
                         } else {
                           GoRouter.of(context).push('/options/friend_requests');
                         }
