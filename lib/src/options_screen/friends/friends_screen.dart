@@ -71,7 +71,6 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
                     itemCount: relationships.length,
                     itemBuilder: (context, index) {
                       final current = relationships[index];
-                      print(current);
                       if (current['source_user_id'] ==
                               SudokGoApi.supabase.auth.currentUser?.id &&
                           FriendshipStatus.pending == current['status']) {
