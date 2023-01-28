@@ -80,7 +80,7 @@ class MainScreen extends StatelessWidget {
               ),
               SudokGoMenuButton(
                 title: GameDifficulty.easy.value,
-                subtitle: 'best time: n/a',
+                subtitle: 'best time: coming soon!',
                 width: MediaQuery.of(context).size.width / 1.25,
                 suffixIcon: const Text(
                   '>',
@@ -95,7 +95,7 @@ class MainScreen extends StatelessWidget {
               ),
               SudokGoMenuButton(
                 title: GameDifficulty.medium.value,
-                subtitle: 'best time: n/a',
+                subtitle: 'best time: coming soon!',
                 width: MediaQuery.of(context).size.width / 1.25,
                 suffixIcon: const Text(
                   '>',
@@ -110,7 +110,7 @@ class MainScreen extends StatelessWidget {
               ),
               SudokGoMenuButton(
                 title: GameDifficulty.hard.value,
-                subtitle: 'best time: n/a',
+                subtitle: 'best time: coming soon!',
                 width: MediaQuery.of(context).size.width / 1.25,
                 suffixIcon: const Text(
                   '>',
