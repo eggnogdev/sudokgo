@@ -6,6 +6,7 @@ class SudokGoApi {
   const SudokGoApi();
 
   static final supabase = Supabase.instance.client;
+  static String? get uid => supabase.auth.currentUser?.id;
 
   static Future<void> login(String email) async {
     await supabase.auth.signInWithOtp(
@@ -33,7 +34,7 @@ class SudokGoApi {
     await supabase.from('users')
       .upsert({
         'created_at': supabase.auth.currentUser?.createdAt,
-        'id': supabase.auth.currentUser?.id,
+        'id': uid,
         'email': supabase.auth.currentUser?.email,
         'display_name': HiveWrapper.getDisplayName(),
       });
@@ -65,7 +66,7 @@ class SudokGoApi {
 
     await supabase.from('friendships')
       .insert({
-        'source_user_id': supabase.auth.currentUser?.id,
+        'source_user_id': uid,
         'target_user_id': otherUserId,
         'status': FriendshipStatus.pending.value,
       });
@@ -96,14 +97,13 @@ class SudokGoApi {
   }
 
   static Future<List<Map<String, dynamic>>> fetchFriendsByStatus(FriendshipStatus status) async {
-    final String? id = supabase.auth.currentUser?.id;
     final List<Map<String, dynamic>> res = [];
 
     if (status != FriendshipStatus.blocked) {
       res.addAll(await supabase.from('friendships')
         .select<List<Map<String, dynamic>>>('*,users!friendships_source_user_id_fkey(*)')
         .match({
-          'target_user_id': id,
+          'target_user_id': uid,
           'status': status.value,
         }));
     }
@@ -111,11 +111,33 @@ class SudokGoApi {
     res.addAll(await supabase.from('friendships')
       .select<List<Map<String, dynamic>>>('*,users!friendships_target_user_id_fkey(*)')
       .match({
-        'source_user_id': id,
+        'source_user_id': uid,
         'status': status.value,
       }));
 
     return res;
+  }
+
+  /// remove the relationship, such as cancel an outgoing request, decline an
+  /// incoming request, remove a friend, and unblock a user
+  /// 
+  /// `other` represents the [int] uuid of the other user in the relationship
+  static Future<void> removeRelationship(String other) async {
+    await supabase.from('friendships')
+      .delete()
+      .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
+      .or('source_user_id.eq.$other,target_user_id.eq.$other');
+  }
+
+  static Future<void> acceptPendingRelationship(String other) async {
+    await supabase.from('friendships')
+      .update({
+        'status': FriendshipStatus.accepted.value,
+      })
+      .match({
+        'source_user_id': other,
+        'target_user_id': uid,
+      });
   }
 }
 
