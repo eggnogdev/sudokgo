@@ -72,7 +72,11 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
                   itemCount: relationships.length,
                   itemBuilder: (context, index) {
                     final current = relationships[index];
-                    if (current['source_user_id'] == SudokGoApi.supabase.auth.currentUser?.id) {
+                    print(current);
+                    if (
+                      current['source_user_id'] == SudokGoApi.supabase.auth.currentUser?.id &&
+                      FriendshipStatus.pending == current['status']
+                    ) {
                       return FriendListItem(
                         displayName: current['users']['display_name'],
                         email: current['users']['email'],
@@ -93,7 +97,10 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
                             ),);
                         },
                       );
-                    } else if (current['target_user_id'] == SudokGoApi.supabase.auth.currentUser?.id) {
+                    } else if (
+                      current['target_user_id'] == SudokGoApi.supabase.auth.currentUser?.id &&
+                       FriendshipStatus.pending == current['status']
+                    ) {
                       return FriendListItem(
                         displayName: current['users']['display_name'],
                         email: current['users']['email'],
@@ -116,6 +123,65 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
                         },
                         leftButtonText: 'decline',
                         leftButtonOnPressed: () {
+                          SudokGoApi.removeRelationship(current['users']['id'])
+                            .then((_) => showSnackBar(
+                              elevation: 2.0,
+                              action: SnackBarAction(
+                                label: 'refresh',
+                                onPressed: () {
+                                  refreshKey.currentState?.show();
+                                },
+                                textColor: Theme.of(context).colorScheme.primary,
+                              ),
+                              context: context,
+                              text: 'refresh to show updates?',
+                            ),);
+                        },
+                      );
+                    } else if (FriendshipStatus.accepted == current['status']) {
+                      return FriendListItem(
+                        displayName: current['users']['display_name'],
+                        email: current['users']['email'],
+                        rightButtonText: 'remove',
+                        rightButtonIsPrimary: false,
+                        rightButtonOnPressed: () {
+                          SudokGoApi.removeRelationship(current['users']['id'])
+                            .then((_) => showSnackBar(
+                              elevation: 2.0,
+                              action: SnackBarAction(
+                                label: 'refresh',
+                                onPressed: () {
+                                  refreshKey.currentState?.show();
+                                },
+                                textColor: Theme.of(context).colorScheme.primary,
+                              ),
+                              context: context,
+                              text: 'refresh to show updates?',
+                            ),);
+                        },
+                        leftButtonText: 'block',
+                        leftButtonOnPressed: () {
+                          SudokGoApi.blockRelationship(current['users']['id'])
+                            .then((_) => showSnackBar(
+                              elevation: 2.0,
+                              action: SnackBarAction(
+                                label: 'refresh',
+                                onPressed: () {
+                                  refreshKey.currentState?.show();
+                                },
+                                textColor: Theme.of(context).colorScheme.primary,
+                              ),
+                              context: context,
+                              text: 'refresh to show updates?',
+                            ),);
+                        },
+                      );
+                    } else if (FriendshipStatus.blocked == current['status']) {
+                      return FriendListItem(
+                        displayName: current['users']['display_name'],
+                        email: current['users']['email'],
+                        rightButtonText: 'unblock',
+                        rightButtonOnPressed: () {
                           SudokGoApi.removeRelationship(current['users']['id'])
                             .then((_) => showSnackBar(
                               elevation: 2.0,

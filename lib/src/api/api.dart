@@ -110,10 +110,8 @@ class SudokGoApi {
 
     res.addAll(await supabase.from('friendships')
       .select<List<Map<String, dynamic>>>('*,users!friendships_target_user_id_fkey(*)')
-      .match({
-        'source_user_id': uid,
-        'status': status.value,
-      }));
+      .eq('status', status.value)
+      .or('source_user_id.eq.$uid,target_user_id.eq.$uid'));
 
     return res;
   }
@@ -138,6 +136,15 @@ class SudokGoApi {
         'source_user_id': other,
         'target_user_id': uid,
       });
+  }
+
+  static Future<void> blockRelationship(String other) async {
+    await supabase.from('friendships')
+      .update({
+        'status': FriendshipStatus.blocked.value,
+      })
+      .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
+      .or('source_user_id.eq.$other,target_user_id.eq.$other');
   }
 }
 
