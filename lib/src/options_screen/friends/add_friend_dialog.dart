@@ -30,7 +30,7 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
         subText: subText,
         subTextIsError: subTextIsError,
         suffixButtonOnPressed: () async {
-          setState(() {
+          if (mounted) setState(() {
             subText = '';
             subTextIsError = false;
             loading = true;
@@ -39,26 +39,26 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
           if (input != '') {
             try {
               await SudokGoApi.addFriend(input);
-              setState(() {
+              if (mounted) setState(() {
                 subText = 'friend request sent';
               });
             } on YouAreYourOwnBestFriendException catch (error) {
-              setState(() {
+              if (mounted) setState(() {
                 subText = error.msg;
               });
             } on SudokGoException catch (error) {
-              setState(() {
+              if (mounted) setState(() {
                 subText = error.msg;
                 subTextIsError = true;
               });
             } catch (error) {
-              setState(() {
+              if (mounted) setState(() {
                 subText = 'unexpected error';
                 subTextIsError = true;
               });
             }
           }
-          setState(() {
+          if (mounted) setState(() {
             loading = false;
           });
         },
@@ -67,7 +67,7 @@ class _AddFriendDialogState extends State<AddFriendDialog> {
   }
 
   void updateSubText({required String text, required bool isError}) {
-    setState(() {
+    if (mounted) setState(() {
       subText = text;
       subTextIsError = isError;
     });
