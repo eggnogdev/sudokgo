@@ -5,6 +5,7 @@ void showSnackBar({
   required String text,
   Widget? prefix,
 }) {
+  ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       shape: RoundedRectangleBorder(
