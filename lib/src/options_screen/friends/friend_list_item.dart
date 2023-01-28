@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
 class FriendListItem extends StatelessWidget {
-  const FriendListItem({super.key, required this.displayName, required this.email, this.width, this.height, this.leftButtonText, required this.rightButtonText, this.leftButtonOnPressed, required this.rightButtonOnPressed, this.leftButtonIsPrimary = false, this.rightButtonIsPrimary = false, this.elevation,});
+  const FriendListItem({
+    super.key,
+    required this.displayName,
+    required this.email,
+    this.width,
+    this.height,
+    this.leftButtonText,
+    required this.rightButtonText,
+    this.leftButtonOnPressed,
+    required this.rightButtonOnPressed,
+    this.leftButtonIsPrimary = false,
+    this.rightButtonIsPrimary = false,
+    this.elevation,
+  });
 
   final String displayName;
   final String email;
@@ -69,24 +82,25 @@ class FriendListItem extends StatelessWidget {
               ),
               Row(
                 children: [
-                  if (leftButtonText != null ) TextButton(
-                    onPressed: leftButtonOnPressed,
-                    style: leftButtonIsPrimary ?
-                      primaryButtonStyle :
-                      normalButtonStyle,
-                    child: Text(
-                      leftButtonText!,
-                      style: const TextStyle(
-                        fontSize: 16.0,
+                  if (leftButtonText != null)
+                    TextButton(
+                      onPressed: leftButtonOnPressed,
+                      style: leftButtonIsPrimary
+                          ? primaryButtonStyle
+                          : normalButtonStyle,
+                      child: Text(
+                        leftButtonText!,
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                        ),
                       ),
                     ),
-                  ),
                   const SizedBox(width: 5.0),
                   TextButton(
                     onPressed: rightButtonOnPressed,
-                    style: rightButtonIsPrimary ?
-                      primaryButtonStyle :
-                      normalButtonStyle,
+                    style: rightButtonIsPrimary
+                        ? primaryButtonStyle
+                        : normalButtonStyle,
                     child: Text(
                       rightButtonText,
                       style: const TextStyle(

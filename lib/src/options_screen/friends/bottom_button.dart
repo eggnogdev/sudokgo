@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BottomButton extends StatelessWidget {
-  const BottomButton({super.key, required this.onPressed, this.width, this.height, required this.text, this.disabled = false,});
+  const BottomButton({
+    super.key,
+    required this.onPressed,
+    this.width,
+    this.height,
+    required this.text,
+    this.disabled = false,
+  });
 
   final Function() onPressed;
   final double? width;
@@ -21,7 +28,9 @@ class BottomButton extends StatelessWidget {
           text,
           style: TextStyle(
             fontSize: 18.0,
-            color: !disabled ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onPrimaryContainer,
+            color: !disabled
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.onPrimaryContainer,
           ),
         ),
       ),

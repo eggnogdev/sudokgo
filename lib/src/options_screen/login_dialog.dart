@@ -14,7 +14,6 @@ class LoginDialog extends StatefulWidget {
 }
 
 class _LoginDialogState extends State<LoginDialog> {
-
   final controller = TextEditingController();
   String subText = '';
   bool subTextIsError = false;
@@ -24,7 +23,8 @@ class _LoginDialogState extends State<LoginDialog> {
 
   @override
   void initState() {
-    authStateSubscription = SudokGoApi.supabase.auth.onAuthStateChange.listen((data) async {
+    authStateSubscription =
+        SudokGoApi.supabase.auth.onAuthStateChange.listen((data) async {
       if (redirecting) return;
       final session = data.session;
       if (session != null) {
@@ -52,15 +52,18 @@ class _LoginDialogState extends State<LoginDialog> {
         controller: controller,
         title: 'email address',
         suffixButtonIcon: loading ? const CircularProgressIndicator() : null,
-        suffixButtonOnPressed: loading ? null : () {
-          if (mounted) setState(() {
-            subText = '';
-            subTextIsError = false;
-          });
-          if (controller.text != '') {
-            login(controller.text);
-          }
-        },
+        suffixButtonOnPressed: loading
+            ? null
+            : () {
+                if (mounted)
+                  setState(() {
+                    subText = '';
+                    subTextIsError = false;
+                  });
+                if (controller.text != '') {
+                  login(controller.text);
+                }
+              },
         subText: subText,
         subTextIsError: subTextIsError,
       ),
@@ -68,27 +71,32 @@ class _LoginDialogState extends State<LoginDialog> {
   }
 
   Future<void> login(String email) async {
-    if (mounted) setState(() {
-      loading = true;
-    });
+    if (mounted)
+      setState(() {
+        loading = true;
+      });
     try {
       await SudokGoApi.login(email);
-      if (mounted) setState(() {
-        subText = 'login link sent to email!';
-      });
+      if (mounted)
+        setState(() {
+          subText = 'login link sent to email!';
+        });
     } on AuthException catch (error) {
-      if (mounted) setState(() {
-        subText = error.message;
-        subTextIsError = true;
-      });
+      if (mounted)
+        setState(() {
+          subText = error.message;
+          subTextIsError = true;
+        });
     } catch (error) {
-      if (mounted) setState(() {
-        subText = error.toString();
-        subTextIsError = true;
-      });
+      if (mounted)
+        setState(() {
+          subText = error.toString();
+          subTextIsError = true;
+        });
     }
-    if (mounted) setState(() {
-      loading = false;
-    });
+    if (mounted)
+      setState(() {
+        loading = false;
+      });
   }
 }

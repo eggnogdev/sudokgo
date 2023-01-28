@@ -25,7 +25,8 @@ class MainScreen extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (AdsPreference.current.value == AdsPreference.minimal) const SudokGoBannerAd(),
+              if (AdsPreference.current.value == AdsPreference.minimal)
+                const SudokGoBannerAd(),
             ],
           ),
         ),
@@ -51,7 +52,7 @@ class MainScreen extends StatelessWidget {
                           splashRadius: 30.0,
                           icon: Image.asset(
                             'assets/images/menu.png',
-                            color: Theme.of(context).colorScheme.onBackground,  
+                            color: Theme.of(context).colorScheme.onBackground,
                           ),
                           onPressed: () {
                             GoRouter.of(context).go('/options');

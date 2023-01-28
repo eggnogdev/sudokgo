@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SudokGoAppBar {
-  static AppBar create({required Widget title, required Function() backOnPressed, required BuildContext context, PreferredSizeWidget? bottom,}) {
+  static AppBar create({
+    required Widget title,
+    required Function() backOnPressed,
+    required BuildContext context,
+    PreferredSizeWidget? bottom,
+  }) {
     return AppBar(
       title: title,
       centerTitle: true,
@@ -35,5 +40,4 @@ class SudokGoAppBar {
       ),
     );
   }
-
 }

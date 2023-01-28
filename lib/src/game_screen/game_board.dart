@@ -17,7 +17,6 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
-
   @override
   void initState() {
     super.initState();
@@ -28,7 +27,7 @@ class _GameBoardState extends State<GameBoard> {
     widget.gameSession.userSolution.value = game.userSolution;
     widget.gameSession.game = game;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final double size = MediaQuery.of(context).size.width / 1.1;
@@ -47,43 +46,47 @@ class _GameBoardState extends State<GameBoard> {
       height: size,
       child: Column(
         children: [
-          for (int i = 0; i < 3; i++) Row(
-            children: [
-              for (int j = 0; j < 3; j++) GameBox(
-                gameSession: widget.gameSession,
-                cellOnPressed: (row, col) {
-                  final String? value = widget.gameSession.selectedValue.value;
+          for (int i = 0; i < 3; i++)
+            Row(
+              children: [
+                for (int j = 0; j < 3; j++)
+                  GameBox(
+                    gameSession: widget.gameSession,
+                    cellOnPressed: (row, col) {
+                      final String? value =
+                          widget.gameSession.selectedValue.value;
 
-                  if (value == null) return;
+                      if (value == null) return;
 
-                  if (value == 'X') {
-                    updateUserSolution(row, col, 0);
-                  } else {
-                    updateUserSolution(row, col, int.parse(value));
-                  }
-                  
-                  bool isSolved = false;
+                      if (value == 'X') {
+                        updateUserSolution(row, col, 0);
+                      } else {
+                        updateUserSolution(row, col, int.parse(value));
+                      }
 
-                  try {
-                    isSolved = SudokuUtilities.isSolved(widget.gameSession.userSolution.value);
-                  } catch (e) {
-                    /// instead of returning false for some reason this library
-                    /// likes to throw an Exception instead therefore this
-                    /// ugly try/catch block must be made
-                  }
+                      bool isSolved = false;
 
-                  if (isSolved) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const WinDialog(),
-                    );
-                  }
-                },
-                cells: getBox(i * 3 + j),
-                boardSize: size,
-              )
-            ],
-          ),
+                      try {
+                        isSolved = SudokuUtilities.isSolved(
+                            widget.gameSession.userSolution.value);
+                      } catch (e) {
+                        /// instead of returning false for some reason this library
+                        /// likes to throw an Exception instead therefore this
+                        /// ugly try/catch block must be made
+                      }
+
+                      if (isSolved) {
+                        showDialog(
+                          context: context,
+                          builder: (context) => const WinDialog(),
+                        );
+                      }
+                    },
+                    cells: getBox(i * 3 + j),
+                    boardSize: size,
+                  )
+              ],
+            ),
         ],
       ),
     );
@@ -100,7 +103,7 @@ class _GameBoardState extends State<GameBoard> {
   Game generateSudoku() {
     SudokuGenerator sudoku;
     Game res;
-    
+
     switch (GameSession.selectedDifficulty) {
       case GameDifficulty.easy:
         sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
@@ -112,14 +115,15 @@ class _GameBoardState extends State<GameBoard> {
         sudoku = SudokuGenerator(emptySquares: 54, uniqueSolution: true);
         break;
       default:
-        throw Exception('Invalid GameDifficulty value: ${GameSession.selectedDifficulty?.value}');
+        throw Exception(
+            'Invalid GameDifficulty value: ${GameSession.selectedDifficulty?.value}');
     }
 
     res = Game()
       ..puzzle = flattenPuzzleToString(sudoku.newSudoku)
       ..solution = sudoku.newSudokuSolved
       ..userSolution = sudoku.newSudoku;
-    
+
     return res;
   }
 
@@ -135,9 +139,21 @@ class _GameBoardState extends State<GameBoard> {
 
   List<List<List<int>>> getBox(int box) {
     List<List<List<int>>> res = [
-      [[], [], [],],
-      [[], [], [],],
-      [[], [], [],],
+      [
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+      ],
+      [
+        [],
+        [],
+        [],
+      ],
     ];
 
     late int rowMin;
@@ -194,5 +210,4 @@ class _GameBoardState extends State<GameBoard> {
 
     return res;
   }
-  
 }

@@ -28,8 +28,8 @@ class AdsPreference {
     if (other is! AdsPreference) return false;
     return other.value == value;
   }
-  
+
   @override
-    // TODO: implement hashCode
+  // TODO: implement hashCode
   int get hashCode => super.hashCode;
 }

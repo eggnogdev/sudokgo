@@ -35,7 +35,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   void initState() {
-    authStateSubscription = SudokGoApi.supabase.auth.onAuthStateChange.listen((data) async {
+    authStateSubscription =
+        SudokGoApi.supabase.auth.onAuthStateChange.listen((data) async {
       if (redirecting) return;
       final session = data.session;
       if (session != null) {
@@ -72,74 +73,81 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   color: Theme.of(context).colorScheme.onBackground,
                 ),
               ),
-              !enterEmail ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                constraints: const BoxConstraints(
-                  maxWidth: 400.0,
-                ),
-                child: SudokGoTextField(
-                  title: 'pick a display name',
-                  controller: nameController,
-                  suffixButtonOnPressed: () async {
-                    final String name = nameController.value.text;
-                    if (name != '') {
-                      await HiveWrapper.setDisplayName(
-                        nameController.value.text,
-                      );
-                      if (mounted) setState(() {
-                        enterEmail = true;
-                      });
-                      emailFocusNode.requestFocus();
-                    }
-                  },
-                ),
-              ) : Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                constraints: const BoxConstraints(
-                  maxWidth: 400.0,
-                ),
-                child: SudokGoTextField(
-                  focusNode: emailFocusNode,
-                  title: 'email address',
-                  controller: emailController,
-                  subText: emailSubText,
-                  subTextIsError: emailSubTextError,
-                  showSuffixButton: true,
-                  suffixButtonIcon: loading ? const CircularProgressIndicator() : null,
-                  suffixButtonOnPressed: loading ? null : () {
-                    if (mounted) setState(() {
-                      emailSubText = '';
-                      emailSubTextError = false;
-                    });
-                    if (emailController.text == '') {
-                      GoRouter.of(context).go('/');
-                    } else {
-                      login(emailController.text);
-                    }
-                  },
-                  titleIcon: Tooltip(
-                    preferBelow: false,
-                    key: tooltipKey,
-                    message: 'enter a blank email to login later',
-                    showDuration: const Duration(seconds: 3),
-                    triggerMode: TooltipTriggerMode.manual,
-                    child: IconButton(
+              !enterEmail
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       constraints: const BoxConstraints(
-                        maxWidth: 60.0,
+                        maxWidth: 400.0,
                       ),
-                      padding: const EdgeInsets.only(),
-                      onPressed: () {
-                        tooltipKey.currentState?.ensureTooltipVisible();
-                      },
-                      icon: Image.asset(
-                        'assets/images/info.png',
-                        color: Theme.of(context).colorScheme.primary,
+                      child: SudokGoTextField(
+                        title: 'pick a display name',
+                        controller: nameController,
+                        suffixButtonOnPressed: () async {
+                          final String name = nameController.value.text;
+                          if (name != '') {
+                            await HiveWrapper.setDisplayName(
+                              nameController.value.text,
+                            );
+                            if (mounted)
+                              setState(() {
+                                enterEmail = true;
+                              });
+                            emailFocusNode.requestFocus();
+                          }
+                        },
                       ),
-                      splashRadius: 15.0,
+                    )
+                  : Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      constraints: const BoxConstraints(
+                        maxWidth: 400.0,
+                      ),
+                      child: SudokGoTextField(
+                        focusNode: emailFocusNode,
+                        title: 'email address',
+                        controller: emailController,
+                        subText: emailSubText,
+                        subTextIsError: emailSubTextError,
+                        showSuffixButton: true,
+                        suffixButtonIcon:
+                            loading ? const CircularProgressIndicator() : null,
+                        suffixButtonOnPressed: loading
+                            ? null
+                            : () {
+                                if (mounted)
+                                  setState(() {
+                                    emailSubText = '';
+                                    emailSubTextError = false;
+                                  });
+                                if (emailController.text == '') {
+                                  GoRouter.of(context).go('/');
+                                } else {
+                                  login(emailController.text);
+                                }
+                              },
+                        titleIcon: Tooltip(
+                          preferBelow: false,
+                          key: tooltipKey,
+                          message: 'enter a blank email to login later',
+                          showDuration: const Duration(seconds: 3),
+                          triggerMode: TooltipTriggerMode.manual,
+                          child: IconButton(
+                            constraints: const BoxConstraints(
+                              maxWidth: 60.0,
+                            ),
+                            padding: const EdgeInsets.only(),
+                            onPressed: () {
+                              tooltipKey.currentState?.ensureTooltipVisible();
+                            },
+                            icon: Image.asset(
+                              'assets/images/info.png',
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            splashRadius: 15.0,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               const SizedBox(
                 height: 20.0,
               ),
@@ -158,29 +166,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> login(String email) async {
-    if (mounted) setState(() {
-      loading = true;
-    });
+    if (mounted)
+      setState(() {
+        loading = true;
+      });
 
     try {
       await SudokGoApi.login(email);
-      if (mounted) setState(() {
-        emailSubText = 'login link sent to email!';
-      });
+      if (mounted)
+        setState(() {
+          emailSubText = 'login link sent to email!';
+        });
     } on AuthException catch (error) {
-      if (mounted) setState(() {
-        emailSubText = error.message;
-        emailSubTextError = true;
-      });
+      if (mounted)
+        setState(() {
+          emailSubText = error.message;
+          emailSubTextError = true;
+        });
     } catch (error) {
-      if (mounted) setState(() {
-        emailSubText = 'Unexpected error';
-        emailSubTextError = true;
-      });
+      if (mounted)
+        setState(() {
+          emailSubText = 'Unexpected error';
+          emailSubTextError = true;
+        });
     }
 
-    if (mounted) setState(() {
-      loading = false;
-    });
+    if (mounted)
+      setState(() {
+        loading = false;
+      });
   }
 }

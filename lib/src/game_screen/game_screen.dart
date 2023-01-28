@@ -50,7 +50,8 @@ class GameScreen extends StatelessWidget {
 
   Future<void> saveGame() async {
     if (gameSession.game == null) {
-      throw Exception('Game stored in current gameSession object is null (SHOULD NEVER HAPPEN).');
+      throw Exception(
+          'Game stored in current gameSession object is null (SHOULD NEVER HAPPEN).');
     }
 
     gameSession.game!.userSolution = gameSession.userSolution.value;
