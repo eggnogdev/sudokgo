@@ -109,6 +109,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   suffixButtonOnPressed: loading ? null : () {
                     if (mounted) setState(() {
                       emailSubText = '';
+                      emailSubTextError = false;
                     });
                     if (emailController.text == '') {
                       GoRouter.of(context).go('/');
