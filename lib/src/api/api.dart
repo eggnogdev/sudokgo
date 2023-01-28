@@ -106,12 +106,21 @@ class SudokGoApi {
           'target_user_id': uid,
           'status': status.value,
         }));
-    }
-
-    res.addAll(await supabase.from('friendships')
+      
+      res.addAll(await supabase.from('friendships')
       .select<List<Map<String, dynamic>>>('*,users!friendships_target_user_id_fkey(*)')
-      .eq('status', status.value)
-      .or('source_user_id.eq.$uid,target_user_id.eq.$uid'));
+      .match({
+        'source_user_id': uid,
+        'status': status.value,
+      }));
+    } else {
+      res.addAll(await supabase.from('friendships')
+      .select<List<Map<String, dynamic>>>('*,users!friendships_target_user_id_fkey(*)')
+      .match({
+        'source_user_id': uid,
+        'status': status.value,
+      }));
+    }
 
     return res;
   }
@@ -142,6 +151,8 @@ class SudokGoApi {
     await supabase.from('friendships')
       .update({
         'status': FriendshipStatus.blocked.value,
+        'source_user_id': uid,
+        'target_user_id': other,
       })
       .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
       .or('source_user_id.eq.$other,target_user_id.eq.$other');
