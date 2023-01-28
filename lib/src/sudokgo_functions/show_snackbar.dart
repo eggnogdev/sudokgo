@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-void showSnackBar(String text, BuildContext context) {
+void showSnackBar({
+  required BuildContext context,
+  required String text,
+  Widget? prefix,
+}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       shape: RoundedRectangleBorder(
@@ -12,7 +16,9 @@ void showSnackBar(String text, BuildContext context) {
       backgroundColor: Theme.of(context).colorScheme.surface,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          if (prefix != null) prefix,
           Text(
             text,
             style: TextStyle(
