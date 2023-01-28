@@ -198,11 +198,11 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
   }
 
   Future<void> onRefresh() async {
-    setState(() {
+    if (mounted) setState(() {
       refreshing = true;
     });
     final res = await SudokGoApi.fetchFriendsByStatus(showingStatus);
-    setState(() {
+    if (mounted) setState(() {
       relationships = res;
       refreshing = false;
     });

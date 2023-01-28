@@ -53,7 +53,7 @@ class _LoginDialogState extends State<LoginDialog> {
         title: 'email address',
         suffixButtonIcon: loading ? const CircularProgressIndicator() : null,
         suffixButtonOnPressed: loading ? null : () {
-          setState(() {
+          if (mounted) setState(() {
             subText = '';
           });
           if (controller.text != '') {
@@ -67,26 +67,26 @@ class _LoginDialogState extends State<LoginDialog> {
   }
 
   Future<void> login(String email) async {
-    setState(() {
+    if (mounted) setState(() {
       loading = true;
     });
     try {
       await SudokGoApi.login(email);
-      setState(() {
+      if (mounted) setState(() {
         subText = 'login link sent to email!';
       });
     } on AuthException catch (error) {
-      setState(() {
+      if (mounted) setState(() {
         subText = error.message;
         subTextIsError = true;
       });
     } catch (error) {
-      setState(() {
+      if (mounted) setState(() {
         subText = error.toString();
         subTextIsError = true;
       });
     }
-    setState(() {
+    if (mounted) setState(() {
       loading = false;
     });
   }

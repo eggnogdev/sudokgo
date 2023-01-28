@@ -86,7 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       await HiveWrapper.setDisplayName(
                         nameController.value.text,
                       );
-                      setState(() {
+                      if (mounted) setState(() {
                         enterEmail = true;
                       });
                       emailFocusNode.requestFocus();
@@ -107,7 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   showSuffixButton: true,
                   suffixButtonIcon: loading ? const CircularProgressIndicator() : null,
                   suffixButtonOnPressed: loading ? null : () {
-                    setState(() {
+                    if (mounted) setState(() {
                       emailSubText = '';
                     });
                     if (emailController.text == '') {
@@ -157,28 +157,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Future<void> login(String email) async {
-    setState(() {
+    if (mounted) setState(() {
       loading = true;
     });
 
     try {
       await SudokGoApi.login(email);
-      setState(() {
+      if (mounted) setState(() {
         emailSubText = 'login link sent to email!';
       });
     } on AuthException catch (error) {
-      setState(() {
+      if (mounted) setState(() {
         emailSubText = error.message;
         emailSubTextError = true;
       });
     } catch (error) {
-      setState(() {
+      if (mounted) setState(() {
         emailSubText = 'Unexpected error';
         emailSubTextError = true;
       });
     }
 
-    setState(() {
+    if (mounted) setState(() {
       loading = false;
     });
   }
