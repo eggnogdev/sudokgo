@@ -29,22 +29,24 @@ class NumberSelector extends StatelessWidget {
         children: [
           Row(
             children: [
-              for (int i = 1; i < 6; i++) NumberSelectorOption(
-                gameSession: gameSession,
-                size: height / 2 - 4,
-                onPressed: onOptionPressed,
-                text: '$i',
-              ),
+              for (int i = 1; i < 6; i++)
+                NumberSelectorOption(
+                  gameSession: gameSession,
+                  size: height / 2 - 4,
+                  onPressed: onOptionPressed,
+                  text: '$i',
+                ),
             ],
           ),
           Row(
             children: [
-              for (int i = 6; i < 10; i++) NumberSelectorOption(
-                gameSession: gameSession,
-                size: height / 2 - 4,
-                onPressed: onOptionPressed,
-                text: '$i',
-              ),
+              for (int i = 6; i < 10; i++)
+                NumberSelectorOption(
+                  gameSession: gameSession,
+                  size: height / 2 - 4,
+                  onPressed: onOptionPressed,
+                  text: '$i',
+                ),
               NumberSelectorOption(
                 gameSession: gameSession,
                 size: height / 2 - 4,
@@ -57,7 +59,7 @@ class NumberSelector extends StatelessWidget {
       ),
     );
   }
-  
+
   void onOptionPressed(String value, bool wasSelected) {
     if (wasSelected) {
       gameSession.selectedValue.value = null;

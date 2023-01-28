@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sudokgo/src/widgets/text_field.dart';
 
 class TextInputDialog extends StatelessWidget {
- TextInputDialog({super.key, required this.prompt, required this.onSubmit,});
+  TextInputDialog({
+    super.key,
+    required this.prompt,
+    required this.onSubmit,
+  });
 
   final Function(String text) onSubmit;
   final String prompt;

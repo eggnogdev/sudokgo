@@ -20,14 +20,15 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(GameAdapter());
-  
+
   await Hive.openBox('user');
   await Hive.openBox('games');
   await Hive.openBox('preferences');
 
   await Supabase.initialize(
     url: 'https://cgpnihdkmtdsyhullueq.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNncG5paGRrbXRkc3lodWxsdWVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzE2Njg2MzEsImV4cCI6MTk4NzI0NDYzMX0.cWdiGW5zkYMVBmyiwEiKgxE4XhmIL88WCju6-QN1p8k',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNncG5paGRrbXRkc3lodWxsdWVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzE2Njg2MzEsImV4cCI6MTk4NzI0NDYzMX0.cWdiGW5zkYMVBmyiwEiKgxE4XhmIL88WCju6-QN1p8k',
   );
 
   String initialRoute = '/';
@@ -70,23 +71,22 @@ class SudokGo extends StatelessWidget {
           ),
         ),
         GoRoute(
-          path: '/options',
-          pageBuilder: (context, state) => buildPageWithDefaultTransition(
-            child: const OptionsScreen(),
-            context: context,
-            state: state,
-          ),
-          routes: [
-            GoRoute(
-              path: 'friend_requests',
-              pageBuilder: (context, state) => buildPageWithDefaultTransition(
-                child: const FriendRequestsScreen(),
-                context: context,
-                state: state,
+            path: '/options',
+            pageBuilder: (context, state) => buildPageWithDefaultTransition(
+                  child: const OptionsScreen(),
+                  context: context,
+                  state: state,
+                ),
+            routes: [
+              GoRoute(
+                path: 'friend_requests',
+                pageBuilder: (context, state) => buildPageWithDefaultTransition(
+                  child: const FriendRequestsScreen(),
+                  context: context,
+                  state: state,
+                ),
               ),
-            ),
-          ]
-        ),
+            ]),
         GoRoute(
           path: '/game',
           pageBuilder: (context, state) => buildPageWithDefaultTransition(

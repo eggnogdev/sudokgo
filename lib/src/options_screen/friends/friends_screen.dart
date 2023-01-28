@@ -40,9 +40,8 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
         title: Text(
           'friends',
           style: TextStyle(
-            fontSize: 32.0,
-            color: Theme.of(context).colorScheme.onBackground
-          ),
+              fontSize: 32.0,
+              color: Theme.of(context).colorScheme.onBackground),
         ),
         backOnPressed: () {
           GoRouter.of(context).pop();
@@ -65,143 +64,165 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               onRefresh: onRefresh,
               child: Container(
-                color: relationships.isNotEmpty || refreshing ?
-                  Theme.of(context).colorScheme.background :
-                  Colors.transparent,
+                color: relationships.isNotEmpty || refreshing
+                    ? Theme.of(context).colorScheme.background
+                    : Colors.transparent,
                 child: ListView.builder(
-                  itemCount: relationships.length,
-                  itemBuilder: (context, index) {
-                    final current = relationships[index];
-                    print(current);
-                    if (
-                      current['source_user_id'] == SudokGoApi.supabase.auth.currentUser?.id &&
-                      FriendshipStatus.pending == current['status']
-                    ) {
-                      return FriendListItem(
-                        displayName: current['users']['display_name'],
-                        email: current['users']['email'],
-                        rightButtonText: 'cancel',
-                        rightButtonOnPressed: () {
-                          SudokGoApi.removeRelationship(current['users']['id'])
-                            .then((_) => showSnackBar(
-                              elevation: 2.0,
-                              action: SnackBarAction(
-                                label: 'refresh',
-                                onPressed: () {
-                                  refreshKey.currentState?.show();
-                                },
-                                textColor: Theme.of(context).colorScheme.primary,
+                    itemCount: relationships.length,
+                    itemBuilder: (context, index) {
+                      final current = relationships[index];
+                      print(current);
+                      if (current['source_user_id'] ==
+                              SudokGoApi.supabase.auth.currentUser?.id &&
+                          FriendshipStatus.pending == current['status']) {
+                        return FriendListItem(
+                          displayName: current['users']['display_name'],
+                          email: current['users']['email'],
+                          rightButtonText: 'cancel',
+                          rightButtonOnPressed: () {
+                            SudokGoApi.removeRelationship(
+                                    current['users']['id'])
+                                .then(
+                              (_) => showSnackBar(
+                                elevation: 2.0,
+                                action: SnackBarAction(
+                                  label: 'refresh',
+                                  onPressed: () {
+                                    refreshKey.currentState?.show();
+                                  },
+                                  textColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                                context: context,
+                                text: 'refresh to show updates?',
                               ),
-                              context: context,
-                              text: 'refresh to show updates?',
-                            ),);
-                        },
-                      );
-                    } else if (
-                      current['target_user_id'] == SudokGoApi.supabase.auth.currentUser?.id &&
-                       FriendshipStatus.pending == current['status']
-                    ) {
-                      return FriendListItem(
-                        displayName: current['users']['display_name'],
-                        email: current['users']['email'],
-                        rightButtonText: 'accept',
-                        rightButtonIsPrimary: true,
-                        rightButtonOnPressed: () {
-                          SudokGoApi.acceptPendingRelationship(current['users']['id'])
-                            .then((_) => showSnackBar(
-                              elevation: 2.0,
-                              action: SnackBarAction(
-                                label: 'refresh',
-                                onPressed: () {
-                                  refreshKey.currentState?.show();
-                                },
-                                textColor: Theme.of(context).colorScheme.primary,
+                            );
+                          },
+                        );
+                      } else if (current['target_user_id'] ==
+                              SudokGoApi.supabase.auth.currentUser?.id &&
+                          FriendshipStatus.pending == current['status']) {
+                        return FriendListItem(
+                          displayName: current['users']['display_name'],
+                          email: current['users']['email'],
+                          rightButtonText: 'accept',
+                          rightButtonIsPrimary: true,
+                          rightButtonOnPressed: () {
+                            SudokGoApi.acceptPendingRelationship(
+                                    current['users']['id'])
+                                .then(
+                              (_) => showSnackBar(
+                                elevation: 2.0,
+                                action: SnackBarAction(
+                                  label: 'refresh',
+                                  onPressed: () {
+                                    refreshKey.currentState?.show();
+                                  },
+                                  textColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                                context: context,
+                                text: 'refresh to show updates?',
                               ),
-                              context: context,
-                              text: 'refresh to show updates?',
-                            ),);
-                        },
-                        leftButtonText: 'decline',
-                        leftButtonOnPressed: () {
-                          SudokGoApi.removeRelationship(current['users']['id'])
-                            .then((_) => showSnackBar(
-                              elevation: 2.0,
-                              action: SnackBarAction(
-                                label: 'refresh',
-                                onPressed: () {
-                                  refreshKey.currentState?.show();
-                                },
-                                textColor: Theme.of(context).colorScheme.primary,
+                            );
+                          },
+                          leftButtonText: 'decline',
+                          leftButtonOnPressed: () {
+                            SudokGoApi.removeRelationship(
+                                    current['users']['id'])
+                                .then(
+                              (_) => showSnackBar(
+                                elevation: 2.0,
+                                action: SnackBarAction(
+                                  label: 'refresh',
+                                  onPressed: () {
+                                    refreshKey.currentState?.show();
+                                  },
+                                  textColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                                context: context,
+                                text: 'refresh to show updates?',
                               ),
-                              context: context,
-                              text: 'refresh to show updates?',
-                            ),);
-                        },
-                      );
-                    } else if (FriendshipStatus.accepted == current['status']) {
-                      return FriendListItem(
-                        displayName: current['users']['display_name'],
-                        email: current['users']['email'],
-                        rightButtonText: 'remove',
-                        rightButtonIsPrimary: false,
-                        rightButtonOnPressed: () {
-                          SudokGoApi.removeRelationship(current['users']['id'])
-                            .then((_) => showSnackBar(
-                              elevation: 2.0,
-                              action: SnackBarAction(
-                                label: 'refresh',
-                                onPressed: () {
-                                  refreshKey.currentState?.show();
-                                },
-                                textColor: Theme.of(context).colorScheme.primary,
+                            );
+                          },
+                        );
+                      } else if (FriendshipStatus.accepted ==
+                          current['status']) {
+                        return FriendListItem(
+                          displayName: current['users']['display_name'],
+                          email: current['users']['email'],
+                          rightButtonText: 'remove',
+                          rightButtonIsPrimary: false,
+                          rightButtonOnPressed: () {
+                            SudokGoApi.removeRelationship(
+                                    current['users']['id'])
+                                .then(
+                              (_) => showSnackBar(
+                                elevation: 2.0,
+                                action: SnackBarAction(
+                                  label: 'refresh',
+                                  onPressed: () {
+                                    refreshKey.currentState?.show();
+                                  },
+                                  textColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                                context: context,
+                                text: 'refresh to show updates?',
                               ),
-                              context: context,
-                              text: 'refresh to show updates?',
-                            ),);
-                        },
-                        leftButtonText: 'block',
-                        leftButtonOnPressed: () {
-                          SudokGoApi.blockRelationship(current['users']['id'])
-                            .then((_) => showSnackBar(
-                              elevation: 2.0,
-                              action: SnackBarAction(
-                                label: 'refresh',
-                                onPressed: () {
-                                  refreshKey.currentState?.show();
-                                },
-                                textColor: Theme.of(context).colorScheme.primary,
+                            );
+                          },
+                          leftButtonText: 'block',
+                          leftButtonOnPressed: () {
+                            SudokGoApi.blockRelationship(current['users']['id'])
+                                .then(
+                              (_) => showSnackBar(
+                                elevation: 2.0,
+                                action: SnackBarAction(
+                                  label: 'refresh',
+                                  onPressed: () {
+                                    refreshKey.currentState?.show();
+                                  },
+                                  textColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                                context: context,
+                                text: 'refresh to show updates?',
                               ),
-                              context: context,
-                              text: 'refresh to show updates?',
-                            ),);
-                        },
-                      );
-                    } else if (FriendshipStatus.blocked == current['status']) {
-                      return FriendListItem(
-                        displayName: current['users']['display_name'],
-                        email: current['users']['email'],
-                        rightButtonText: 'unblock',
-                        rightButtonOnPressed: () {
-                          SudokGoApi.removeRelationship(current['users']['id'])
-                            .then((_) => showSnackBar(
-                              elevation: 2.0,
-                              action: SnackBarAction(
-                                label: 'refresh',
-                                onPressed: () {
-                                  refreshKey.currentState?.show();
-                                },
-                                textColor: Theme.of(context).colorScheme.primary,
+                            );
+                          },
+                        );
+                      } else if (FriendshipStatus.blocked ==
+                          current['status']) {
+                        return FriendListItem(
+                          displayName: current['users']['display_name'],
+                          email: current['users']['email'],
+                          rightButtonText: 'unblock',
+                          rightButtonOnPressed: () {
+                            SudokGoApi.removeRelationship(
+                                    current['users']['id'])
+                                .then(
+                              (_) => showSnackBar(
+                                elevation: 2.0,
+                                action: SnackBarAction(
+                                  label: 'refresh',
+                                  onPressed: () {
+                                    refreshKey.currentState?.show();
+                                  },
+                                  textColor:
+                                      Theme.of(context).colorScheme.primary,
+                                ),
+                                context: context,
+                                text: 'refresh to show updates?',
                               ),
-                              context: context,
-                              text: 'refresh to show updates?',
-                            ),);
-                        },
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  }
-                ),
+                            );
+                          },
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    }),
               ),
             ),
           ],
@@ -211,9 +232,7 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
-            context: context,
-            builder: (context) => const AddFriendDialog()
-          );
+              context: context, builder: (context) => const AddFriendDialog());
         },
         backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -264,13 +283,15 @@ class _FriendRequestsScreenState extends State<FriendRequestsScreen> {
   }
 
   Future<void> onRefresh() async {
-    if (mounted) setState(() {
-      refreshing = true;
-    });
+    if (mounted)
+      setState(() {
+        refreshing = true;
+      });
     final res = await SudokGoApi.fetchFriendsByStatus(showingStatus);
-    if (mounted) setState(() {
-      relationships = res;
-      refreshing = false;
-    });
+    if (mounted)
+      setState(() {
+        relationships = res;
+        refreshing = false;
+      });
   }
 }

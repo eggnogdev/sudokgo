@@ -25,28 +25,27 @@ class SudokGoApi {
   }
 
   /// Create the user row in the users table
-  /// 
+  ///
   /// perform an upsert on the users table to either create or update the current
   /// users row in the table which will ensure they have a row in the table and
   /// that the `display_name` property in the table is in sync with the display
   /// name stored in the [Hive]
   static Future<void> upsertUserRow() async {
-    await supabase.from('users')
-      .upsert({
-        'created_at': supabase.auth.currentUser?.createdAt,
-        'id': uid,
-        'email': supabase.auth.currentUser?.email,
-        'display_name': HiveWrapper.getDisplayName(),
-      });
+    await supabase.from('users').upsert({
+      'created_at': supabase.auth.currentUser?.createdAt,
+      'id': uid,
+      'email': supabase.auth.currentUser?.email,
+      'display_name': HiveWrapper.getDisplayName(),
+    });
   }
 
   static Future<void> addFriend(String email) async {
     if (email == supabase.auth.currentUser?.email) {
       throw YouAreYourOwnBestFriendException('you are your own best friend :)');
     }
-    
+
     final otherUserId = await getIdByEmail(email);
-    
+
     if (otherUserId == null) {
       throw UserNotFoundException('this user does not exist');
     }
@@ -56,67 +55,75 @@ class SudokGoApi {
     // ignore: unrelated_type_equality_checks
     if (FriendshipStatus.blocked == existingStatus) {
       throw UserNotFoundException('user does not exist');
-    // ignore: unrelated_type_equality_checks
+      // ignore: unrelated_type_equality_checks
     } else if (FriendshipStatus.pending == existingStatus) {
       throw RelationshipAlreadyExistsException('already pending');
-    // ignore: unrelated_type_equality_checks
+      // ignore: unrelated_type_equality_checks
     } else if (FriendshipStatus.accepted == existingStatus) {
       throw RelationshipAlreadyExistsException('already friends');
     }
 
-    await supabase.from('friendships')
-      .insert({
-        'source_user_id': uid,
-        'target_user_id': otherUserId,
-        'status': FriendshipStatus.pending.value,
-      });
+    await supabase.from('friendships').insert({
+      'source_user_id': uid,
+      'target_user_id': otherUserId,
+      'status': FriendshipStatus.pending.value,
+    });
   }
 
   /// get the [int] representation of the relationship between the current user
   /// and `other` which represents the `id` of the other user
   static Future<int> getFriendshipStatus(String other) async {
-    final query = await supabase.from('friendships')
-      .select<List<Map<String, dynamic>>>('status')
-      .match({
-        'source_user_id': supabase.auth.currentUser?.id,
-        'target_user_id': other,
-      });
-    
+    final query = await supabase
+        .from('friendships')
+        .select<List<Map<String, dynamic>>>('status')
+        .match({
+      'source_user_id': supabase.auth.currentUser?.id,
+      'target_user_id': other,
+    });
+
     return query.isEmpty ? -1 : query[0]['status'];
   }
 
   /// get the [String] id of a user based on their email
-  /// 
+  ///
   /// returns null if no user is found
   static Future<String?> getIdByEmail(String email) async {
-    final query = await supabase.from('users')
-      .select<List<Map<String, dynamic>>>('id')
-      .eq('email', email);
-    
+    final query = await supabase
+        .from('users')
+        .select<List<Map<String, dynamic>>>('id')
+        .eq('email', email);
+
     return query.isEmpty ? null : query[0]['id'];
   }
 
-  static Future<List<Map<String, dynamic>>> fetchFriendsByStatus(FriendshipStatus status) async {
+  static Future<List<Map<String, dynamic>>> fetchFriendsByStatus(
+      FriendshipStatus status) async {
     final List<Map<String, dynamic>> res = [];
 
     if (status != FriendshipStatus.blocked) {
-      res.addAll(await supabase.from('friendships')
-        .select<List<Map<String, dynamic>>>('*,users!friendships_source_user_id_fkey(*)')
-        .match({
-          'target_user_id': uid,
-          'status': status.value,
-        }));
-      
-      res.addAll(await supabase.from('friendships')
-      .select<List<Map<String, dynamic>>>('*,users!friendships_target_user_id_fkey(*)')
-      .match({
+      res.addAll(await supabase
+          .from('friendships')
+          .select<List<Map<String, dynamic>>>(
+              '*,users!friendships_source_user_id_fkey(*)')
+          .match({
+        'target_user_id': uid,
+        'status': status.value,
+      }));
+
+      res.addAll(await supabase
+          .from('friendships')
+          .select<List<Map<String, dynamic>>>(
+              '*,users!friendships_target_user_id_fkey(*)')
+          .match({
         'source_user_id': uid,
         'status': status.value,
       }));
     } else {
-      res.addAll(await supabase.from('friendships')
-      .select<List<Map<String, dynamic>>>('*,users!friendships_target_user_id_fkey(*)')
-      .match({
+      res.addAll(await supabase
+          .from('friendships')
+          .select<List<Map<String, dynamic>>>(
+              '*,users!friendships_target_user_id_fkey(*)')
+          .match({
         'source_user_id': uid,
         'status': status.value,
       }));
@@ -127,35 +134,35 @@ class SudokGoApi {
 
   /// remove the relationship, such as cancel an outgoing request, decline an
   /// incoming request, remove a friend, and unblock a user
-  /// 
+  ///
   /// `other` represents the [int] uuid of the other user in the relationship
   static Future<void> removeRelationship(String other) async {
-    await supabase.from('friendships')
-      .delete()
-      .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
-      .or('source_user_id.eq.$other,target_user_id.eq.$other');
+    await supabase
+        .from('friendships')
+        .delete()
+        .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
+        .or('source_user_id.eq.$other,target_user_id.eq.$other');
   }
 
   static Future<void> acceptPendingRelationship(String other) async {
-    await supabase.from('friendships')
-      .update({
-        'status': FriendshipStatus.accepted.value,
-      })
-      .match({
-        'source_user_id': other,
-        'target_user_id': uid,
-      });
+    await supabase.from('friendships').update({
+      'status': FriendshipStatus.accepted.value,
+    }).match({
+      'source_user_id': other,
+      'target_user_id': uid,
+    });
   }
 
   static Future<void> blockRelationship(String other) async {
-    await supabase.from('friendships')
-      .update({
-        'status': FriendshipStatus.blocked.value,
-        'source_user_id': uid,
-        'target_user_id': other,
-      })
-      .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
-      .or('source_user_id.eq.$other,target_user_id.eq.$other');
+    await supabase
+        .from('friendships')
+        .update({
+          'status': FriendshipStatus.blocked.value,
+          'source_user_id': uid,
+          'target_user_id': other,
+        })
+        .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
+        .or('source_user_id.eq.$other,target_user_id.eq.$other');
   }
 }
 
@@ -187,6 +194,7 @@ class RelationshipAlreadyExistsException extends SudokGoException {
   }
 }
 
-class YouAreYourOwnBestFriendException extends RelationshipAlreadyExistsException {
+class YouAreYourOwnBestFriendException
+    extends RelationshipAlreadyExistsException {
   YouAreYourOwnBestFriendException(super.msg);
 }

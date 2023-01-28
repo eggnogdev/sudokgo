@@ -14,11 +14,11 @@ class _SudokGoBannerAdState extends State<SudokGoBannerAd> {
 
   final String testUnitId = 'ca-app-pub-3940256099942544/6300978111';
   final String unitId = 'ca-app-pub-3245400651004869/5569370967';
-  
+
   @override
   void initState() {
     super.initState();
-    
+
     banner = BannerAd(
       adUnitId: testUnitId,
       size: AdSize.banner,
@@ -30,23 +30,21 @@ class _SudokGoBannerAdState extends State<SudokGoBannerAd> {
       request: const AdRequest(),
     );
 
-    banner.load().then(
-      (value) {
-        setState(() {
-          loading = false;
-        });  
-      }
-    );
+    banner.load().then((value) {
+      setState(() {
+        loading = false;
+      });
+    });
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    return loading ?
-      const SizedBox() :
-      SizedBox(
-        width: banner.size.width.toDouble(),
-        height: banner.size.height.toDouble(),
-        child: AdWidget(ad: banner),
-      );
+    return loading
+        ? const SizedBox()
+        : SizedBox(
+            width: banner.size.width.toDouble(),
+            height: banner.size.height.toDouble(),
+            child: AdWidget(ad: banner),
+          );
   }
 }

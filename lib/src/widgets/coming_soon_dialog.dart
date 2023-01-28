@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sudokgo/src/widgets/text_button.dart';
 
 class ComingSoonDialog extends StatelessWidget {
-  const ComingSoonDialog({super.key, this.title = 'coming soon!',});
+  const ComingSoonDialog({
+    super.key,
+    this.title = 'coming soon!',
+  });
 
   final String title;
 

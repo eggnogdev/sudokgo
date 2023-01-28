@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 class SudokGoMenuButton extends StatelessWidget {
-  const SudokGoMenuButton({super.key, required this.onPressed, required this.title, this.subtitle, this.width, this.height, this.suffixIcon,});
+  const SudokGoMenuButton({
+    super.key,
+    required this.onPressed,
+    required this.title,
+    this.subtitle,
+    this.width,
+    this.height,
+    this.suffixIcon,
+  });
 
   final Function() onPressed;
   final String title;
@@ -42,12 +50,13 @@ class SudokGoMenuButton extends StatelessWidget {
                       fontSize: 28.0,
                     ),
                   ),
-                  if (subtitle != null) Text(
-                    subtitle!,
-                    style: const TextStyle(
-                      fontSize: 16.0,
+                  if (subtitle != null)
+                    Text(
+                      subtitle!,
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                      ),
                     ),
-                  ),
                 ],
               ),
               if (suffixIcon != null) suffixIcon!,
