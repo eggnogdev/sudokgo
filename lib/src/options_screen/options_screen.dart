@@ -54,10 +54,11 @@ class OptionsScreen extends StatelessWidget {
                     SudokGoMenuButton(
                       title: 'display name',
                       subtitle: 'edit your display name',
-                      suffixIcon: const Text(
+                      suffixIcon: Text(
                         '>',
                         style: TextStyle(
                           fontSize: 48.0,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       width: width,
@@ -81,7 +82,10 @@ class OptionsScreen extends StatelessWidget {
                       subtitle: 'view your performance',
                       suffixIcon: SizedBox(
                         width: 50.0,
-                        child: Image.asset('assets/images/statistics.png'),
+                        child: Image.asset(
+                          'assets/images/statistics.png',
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       width: width,
                       onPressed: () {
@@ -97,7 +101,10 @@ class OptionsScreen extends StatelessWidget {
                       subtitle: 'view, request, and accept',
                       suffixIcon: SizedBox(
                         width: 50.0,
-                        child: Image.asset('assets/images/add_friend.png'),
+                        child: Image.asset(
+                          'assets/images/add_friend.png',
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       width: width,
                       onPressed: () {
@@ -120,7 +127,10 @@ class OptionsScreen extends StatelessWidget {
                             subtitle: preference.toString(),
                             suffixIcon: SizedBox(
                               width: 50.0,
-                              child: Image.asset('assets/images/spin_icon.png'),
+                              child: Image.asset(
+                                'assets/images/spin_icon.png',
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
                             width: width,
                             onPressed: () {
@@ -147,9 +157,10 @@ class OptionsScreen extends StatelessWidget {
                             width: width,
                             title: 'login',
                             subtitle: 'access online features',
-                            suffixIcon: const Icon(
+                            suffixIcon: Icon(
                               Icons.login_rounded,
                               size: 40.0,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             onPressed: () {
                               showDialog(
@@ -162,9 +173,10 @@ class OptionsScreen extends StatelessWidget {
                             width: width,
                             title: 'logout',
                             subtitle: 'only play solo',
-                            suffixIcon: const Icon(
+                            suffixIcon: Icon(
                               Icons.logout_rounded,
                               size: 40.0,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             onPressed: () {
                               SudokGoApi.logout().then(
@@ -178,7 +190,10 @@ class OptionsScreen extends StatelessWidget {
                       subtitle: 'open source licenses',
                       suffixIcon: SizedBox(
                         width: 50.0,
-                        child: Image.asset('assets/images/licenses.png'),
+                        child: Image.asset(
+                          'assets/images/licenses.png',
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                       width: width,
                       onPressed: () {

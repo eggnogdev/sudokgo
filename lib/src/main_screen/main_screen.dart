@@ -51,7 +51,7 @@ class MainScreen extends StatelessWidget {
                           splashRadius: 30.0,
                           icon: Image.asset(
                             'assets/images/menu.png',
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           onPressed: () {
                             GoRouter.of(context).go('/options');
