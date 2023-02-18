@@ -136,7 +136,7 @@ class SudokGoApi {
   /// remove the relationship, such as cancel an outgoing request, decline an
   /// incoming request, remove a friend, and unblock a user
   ///
-  /// `other` represents the [int] uuid of the other user in the relationship
+  /// `other` represents the [String] uuid of the other user in the relationship
   static Future<void> removeRelationship(String other) async {
     await supabase
         .from('friendships')
@@ -168,7 +168,7 @@ class SudokGoApi {
 
   /// create a sudoku game and insert a row into the comp_games table to
   /// initiate a game with the `other` user which is represented by their
-  /// [int] uuid
+  /// [String] uuid
   static Future<void> initiateCompWithOther(String other) async {
     final sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
 
@@ -178,15 +178,43 @@ class SudokGoApi {
         'initiator': uid,
         'participant': other,
         'board': sudoku.newSudoku,
-        'solution': sudoku.newSudokuSolved,
       });
   }
 
-  static Future<void> endCurrentComp() async {
+  static Future<void> endAllComp() async {
     await supabase
       .from('comp_games')
       .delete()
       .or('initiator.eq.$uid,participant.eq.$uid');
+  }
+  
+  /// delete all comp games from the table that the user has initiated
+  static Future<void> endInitiatedComp() async {
+    await supabase
+      .from('comp_games')
+      .delete()
+      .eq('initiator', uid);
+  }
+
+  /// delete all comp games from the table that another user initiated for the
+  /// current user
+  static Future<void> endParticipatingComp() async {
+    await supabase
+      .from('comp_games')
+      .delete()
+      .eq('participant', uid);
+  }
+
+  /// accept an invitation to a comp game that another user has initited for the
+  /// current user. `other` represents the [String] uid 
+  static Future<void> acceptParticipatingComp(String other) async {
+    await supabase
+      .from('comp_games')
+      .update({
+        'accepted': true,
+      })
+      .eq('initiator', other)
+      .eq('participant', uid);
   }
 }
 

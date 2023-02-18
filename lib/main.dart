@@ -8,6 +8,8 @@ import 'package:sudokgo/src/hive/game.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/licenses_screen/licenses_screen.dart';
 import 'package:sudokgo/src/main_screen/main_screen.dart';
+import 'package:sudokgo/src/multiplayer/game_invitation_screen.dart';
+import 'package:sudokgo/src/multiplayer/waiting_screen.dart';
 import 'package:sudokgo/src/onboarding/onboarding_screen.dart';
 import 'package:sudokgo/src/options_screen/friends/friends_screen.dart';
 import 'package:sudokgo/src/options_screen/options_screen.dart';
@@ -95,6 +97,27 @@ class SudokGo extends StatelessWidget {
             ),
             context: context,
             state: state,
+          ),
+        ),
+        GoRoute(
+          path: '/waiting/:display_name',
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            context: context,
+            state: state,
+            child: WaitingScreen(
+              displayName: state.params['display_name']!,
+            ),
+          ) ,
+        ),
+        GoRoute(
+          path: '/game_invitation/:display_name/:ouid',
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            context: context,
+            state: state,
+            child: GameInvitationScreen(
+              displayName: state.params['display_name']!,
+              ouid: state.params['ouid']!,
+            ),
           ),
         ),
         GoRoute(

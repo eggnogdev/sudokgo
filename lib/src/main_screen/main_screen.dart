@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sudokgo/src/api/api.dart';
@@ -5,15 +7,43 @@ import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/main_screen/continue_or_new_dialog.dart';
+import 'package:sudokgo/src/main_screen/invite_friend_dialog.dart';
 import 'package:sudokgo/src/main_screen/solo_online_switch.dart';
 import 'package:sudokgo/src/monetization/ads_preference.dart';
 import 'package:sudokgo/src/monetization/banner_ad.dart';
 import 'package:sudokgo/src/online/online_status.dart';
 import 'package:sudokgo/src/widgets/menu_button.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  late StreamSubscription listener;
+
+  @override
+  void initState() {
+    super.initState();
+    listener = SudokGoApi.supabase
+      .from('comp_games')
+      .stream(primaryKey: ['id'])
+      .listen((List<Map<String, dynamic>> data) async {
+        final initiator = await SudokGoApi.supabase
+          .from('users')
+          .select<List<Map<String, dynamic>>>()
+          .eq('id', data[0]['initiator']);
+        final displayName = initiator[0]['display_name'];
+        final id = initiator[0]['id'];
+
+        if (data.isNotEmpty) {
+          GoRouter.of(context).go('/game_invitation/$displayName/$id');
+        }
+      });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,7 +161,13 @@ class MainScreen extends StatelessWidget {
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.easy;
                   if (OnlineStatus.online.value) {
-
+                    showDialog(
+                      context: context,
+                      builder: (context) => const InviteFriendDialog(),
+                    );
+                    return;
+                    SudokGoApi.initiateCompWithOther('c1e22443-6a40-47a0-93bb-2c00b2391221')
+                    .then((_) => GoRouter.of(context).go('/game'));
                   } else {
                     dialogOrGame(context);
                   }
