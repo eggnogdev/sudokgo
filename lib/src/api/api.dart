@@ -1,6 +1,7 @@
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/types/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 class SudokGoApi {
   const SudokGoApi();
@@ -163,6 +164,29 @@ class SudokGoApi {
         })
         .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
         .or('source_user_id.eq.$other,target_user_id.eq.$other');
+  }
+
+  /// create a sudoku game and insert a row into the comp_games table to
+  /// initiate a game with the `other` user which is represented by their
+  /// [int] uuid
+  static Future<void> initiateCompWithOther(String other) async {
+    final sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
+
+    await supabase
+      .from('comp_games')
+      .insert({
+        'initiator': uid,
+        'participant': other,
+        'board': sudoku.newSudoku,
+        'solution': sudoku.newSudokuSolved,
+      });
+  }
+
+  static Future<void> endCurrentComp() async {
+    await supabase
+      .from('comp_games')
+      .delete()
+      .or('initiator.eq.$uid,participant.eq.$uid');
   }
 }
 
