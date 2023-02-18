@@ -23,7 +23,6 @@ class _InviteFriendDialogState extends State<InviteFriendDialog> {
           friends = value;
           loading = false;
         });
-        print(friends);
       });
   }
   

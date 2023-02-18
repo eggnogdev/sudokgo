@@ -63,8 +63,8 @@ class _WaitingScreenState extends State<WaitingScreen> {
               const SizedBox(height: 10.0),
               TextButton(
                 onPressed: () {
-                  SudokGoApi.endInitiatedComp();
-                  GoRouter.of(context).go('/');
+                  SudokGoApi.endInitiatedComp()
+                    .then((_) => GoRouter.of(context).go('/'));
                 },
                 child: Text(
                   'cancel',
