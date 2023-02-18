@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sudokgo/src/api/api.dart';
 import 'package:sudokgo/src/game_screen/game_box.dart';
 import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/game_screen/win_dialog.dart';
 import 'package:sudokgo/src/hive/game.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
+import 'package:sudokgo/src/online/online_status.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 class GameBoard extends StatefulWidget {
@@ -17,21 +19,45 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
+  bool loadingInitial = true;
+  
   @override
   void initState() {
     super.initState();
+    if (OnlineStatus.online.value) {
+      SudokGoApi.supabase
+        .from('comp_games')
+        .stream(primaryKey: ['id'])
+        .listen((List<Map<String, dynamic>> data) {
+          if (loadingInitial) {
+            widget.gameSession.puzzle = flattenPuzzleToString(data[0]['board']);
+            widget.gameSession.userSolution.value = data[0]['board'];
+          }
+          
+          if (loadingInitial) {
+            setState(() {
+              loadingInitial = false;
+            });
+          }
+        });
+    } else {
+      final game = grabGame();
 
-    final game = grabGame();
-
-    widget.gameSession.puzzle = game.puzzle;
-    widget.gameSession.userSolution.value = game.userSolution;
-    widget.gameSession.game = game;
+      widget.gameSession.puzzle = game.puzzle;
+      widget.gameSession.userSolution.value = game.userSolution;
+      widget.gameSession.game = game;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final double size = MediaQuery.of(context).size.width / 1.1;
-    return Container(
+    return loadingInitial ? Center(
+      child: CircularProgressIndicator(
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+      ),
+    ) : Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
         color: Theme.of(context).colorScheme.surface,
@@ -68,7 +94,7 @@ class _GameBoardState extends State<GameBoard> {
 
                       try {
                         isSolved = SudokuUtilities.isSolved(
-                            widget.gameSession.userSolution.value);
+                            widget.gameSession.userSolution.value.cast<List<int>>());
                       } catch (e) {
                         /// instead of returning false for some reason this library
                         /// likes to throw an Exception instead therefore this
@@ -93,6 +119,7 @@ class _GameBoardState extends State<GameBoard> {
   }
 
   Game grabGame() {
+
     return getPuzzleFromHive() ?? generateSudoku();
   }
 

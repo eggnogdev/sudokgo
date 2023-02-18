@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sudokgo/src/api/api.dart';
 import 'package:sudokgo/src/game_screen/game_board.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/game_screen/number_selector.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
+import 'package:sudokgo/src/online/online_status.dart';
 import 'package:sudokgo/src/widgets/sudokgo_app_bar.dart';
 
 class GameScreen extends StatelessWidget {
@@ -54,7 +56,7 @@ class GameScreen extends StatelessWidget {
           'Game stored in current gameSession object is null (SHOULD NEVER HAPPEN).');
     }
 
-    gameSession.game!.userSolution = gameSession.userSolution.value;
+    gameSession.game!.userSolution = gameSession.userSolution.value.cast<List<int>>();
 
     await HiveWrapper.setGame(
       GameSession.selectedDifficulty!,
@@ -63,7 +65,11 @@ class GameScreen extends StatelessWidget {
   }
 
   void backOnPressed(BuildContext context) async {
-    await saveGame();
+    if (OnlineStatus.online.value) {
+      SudokGoApi.endCurrentComp();
+    } else {
+      await saveGame();
+    }
     GameSession.selectedDifficulty = null;
     GoRouter.of(context).go('/');
   }

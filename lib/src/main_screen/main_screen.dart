@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sudokgo/src/api/api.dart';
 import 'package:sudokgo/src/game_screen/game_difficulty.dart';
 import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
@@ -7,6 +8,7 @@ import 'package:sudokgo/src/main_screen/continue_or_new_dialog.dart';
 import 'package:sudokgo/src/main_screen/solo_online_switch.dart';
 import 'package:sudokgo/src/monetization/ads_preference.dart';
 import 'package:sudokgo/src/monetization/banner_ad.dart';
+import 'package:sudokgo/src/online/online_status.dart';
 import 'package:sudokgo/src/widgets/menu_button.dart';
 
 class MainScreen extends StatelessWidget {
@@ -90,7 +92,11 @@ class MainScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.easy;
-                  dialogOrGame(context);
+                  if (OnlineStatus.online.value) {
+
+                  } else {
+                    dialogOrGame(context);
+                  }
                 },
               ),
               SudokGoMenuButton(
@@ -104,8 +110,12 @@ class MainScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  GameSession.selectedDifficulty = GameDifficulty.medium;
-                  dialogOrGame(context);
+                  GameSession.selectedDifficulty = GameDifficulty.easy;
+                  if (OnlineStatus.online.value) {
+
+                  } else {
+                    dialogOrGame(context);
+                  }
                 },
               ),
               SudokGoMenuButton(
@@ -119,8 +129,12 @@ class MainScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  GameSession.selectedDifficulty = GameDifficulty.hard;
-                  dialogOrGame(context);
+                  GameSession.selectedDifficulty = GameDifficulty.easy;
+                  if (OnlineStatus.online.value) {
+
+                  } else {
+                    dialogOrGame(context);
+                  }
                 },
               ),
               const SoloOnlineSwitch(),
