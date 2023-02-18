@@ -66,7 +66,7 @@ class GameScreen extends StatelessWidget {
 
   void backOnPressed(BuildContext context) async {
     if (OnlineStatus.online.value) {
-      SudokGoApi.endCurrentComp();
+      SudokGoApi.endAllComp();
     } else {
       await saveGame();
     }
