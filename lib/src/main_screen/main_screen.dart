@@ -22,26 +22,47 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  late StreamSubscription listener;
+  late StreamSubscription databaseListener;
+  late void Function() onlineStatusListener = () {
+    if (OnlineStatus.online.value) {
+      databaseListener.resume();
+    } else {
+      databaseListener.pause();
+    }
+  };
 
   @override
   void initState() {
     super.initState();
-    listener = SudokGoApi.supabase
+    databaseListener = SudokGoApi.supabase
       .from('comp_games')
       .stream(primaryKey: ['id'])
       .listen((List<Map<String, dynamic>> data) async {
-        final initiator = await SudokGoApi.supabase
-          .from('users')
-          .select<List<Map<String, dynamic>>>()
-          .eq('id', data[0]['initiator']);
-        final displayName = initiator[0]['display_name'];
-        final id = initiator[0]['id'];
-
         if (data.isNotEmpty) {
+          if (data[0]['initiator'] == SudokGoApi.uid) return;
+          final initiator = await SudokGoApi.supabase
+            .from('users')
+            .select<List<Map<String, dynamic>>>()
+            .eq('id', data[0]['initiator']);
+          final displayName = initiator[0]['display_name'];
+          final id = initiator[0]['id'];
+          
           GoRouter.of(context).go('/game_invitation/$displayName/$id');
         }
       });
+      if (OnlineStatus.online.value) {
+        databaseListener.resume();
+      } else {
+        databaseListener.pause();
+      }
+      OnlineStatus.online.addListener(onlineStatusListener);
+  }
+
+  @override
+  void dispose() {
+    databaseListener.cancel();
+    OnlineStatus.online.removeListener(onlineStatusListener);
+    super.dispose();
   }
   
   @override
@@ -123,7 +144,10 @@ class _MainScreenState extends State<MainScreen> {
                 onPressed: () {
                   GameSession.selectedDifficulty = GameDifficulty.easy;
                   if (OnlineStatus.online.value) {
-
+                    showDialog(
+                      context: context,
+                      builder: (context) => const InviteFriendDialog(),
+                    );
                   } else {
                     dialogOrGame(context);
                   }
@@ -140,9 +164,12 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
                 onPressed: () {
-                  GameSession.selectedDifficulty = GameDifficulty.easy;
+                  GameSession.selectedDifficulty = GameDifficulty.medium;
                   if (OnlineStatus.online.value) {
-
+                    showDialog(
+                      context: context,
+                      builder: (context) => const InviteFriendDialog(),
+                    );
                   } else {
                     dialogOrGame(context);
                   }
@@ -159,15 +186,12 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
                 onPressed: () {
-                  GameSession.selectedDifficulty = GameDifficulty.easy;
+                  GameSession.selectedDifficulty = GameDifficulty.hard;
                   if (OnlineStatus.online.value) {
                     showDialog(
                       context: context,
                       builder: (context) => const InviteFriendDialog(),
                     );
-                    return;
-                    SudokGoApi.initiateCompWithOther('c1e22443-6a40-47a0-93bb-2c00b2391221')
-                    .then((_) => GoRouter.of(context).go('/game'));
                   } else {
                     dialogOrGame(context);
                   }

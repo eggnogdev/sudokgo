@@ -1,3 +1,5 @@
+import 'package:sudokgo/src/game_screen/game_difficulty.dart';
+import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/types/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -170,7 +172,22 @@ class SudokGoApi {
   /// initiate a game with the `other` user which is represented by their
   /// [String] uuid
   static Future<void> initiateCompWithOther(String other) async {
-    final sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
+    SudokuGenerator sudoku;
+
+    switch (GameSession.selectedDifficulty) {
+      case GameDifficulty.easy:
+        sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
+        break;
+      case GameDifficulty.medium:
+        sudoku = SudokuGenerator(emptySquares: 36, uniqueSolution: true);
+        break;
+      case GameDifficulty.hard:
+        sudoku = SudokuGenerator(emptySquares: 54, uniqueSolution: true);
+        break;
+      default:
+        throw Exception(
+            'Invalid GameDifficulty value: ${GameSession.selectedDifficulty?.value}');
+    }
 
     await supabase
       .from('comp_games')
@@ -178,6 +195,7 @@ class SudokGoApi {
         'initiator': uid,
         'participant': other,
         'board': sudoku.newSudoku,
+        'solution': sudoku.newSudokuSolved,
       });
   }
 
