@@ -52,10 +52,9 @@ class _GameBoardState extends State<GameBoard> {
   @override
   Widget build(BuildContext context) {
     final double size = MediaQuery.of(context).size.width / 1.1;
-    return loadingInitial ? Center(
+    return loadingInitial && OnlineStatus.online.value ? Center(
       child: CircularProgressIndicator(
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
+        color: Theme.of(context).colorScheme.primaryContainer,
       ),
     ) : Container(
       decoration: BoxDecoration(
