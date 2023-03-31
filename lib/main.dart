@@ -8,6 +8,8 @@ import 'package:sudokgo/src/hive/game.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/licenses_screen/licenses_screen.dart';
 import 'package:sudokgo/src/main_screen/main_screen.dart';
+import 'package:sudokgo/src/multiplayer/game_invitation_screen.dart';
+import 'package:sudokgo/src/multiplayer/waiting_screen.dart';
 import 'package:sudokgo/src/onboarding/onboarding_screen.dart';
 import 'package:sudokgo/src/options_screen/friends/friends_screen.dart';
 import 'package:sudokgo/src/options_screen/options_screen.dart';
@@ -98,6 +100,27 @@ class SudokGo extends StatelessWidget {
           ),
         ),
         GoRoute(
+          path: '/waiting/:display_name',
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            context: context,
+            state: state,
+            child: WaitingScreen(
+              displayName: state.params['display_name']!,
+            ),
+          ) ,
+        ),
+        GoRoute(
+          path: '/game_invitation/:display_name/:ouid',
+          pageBuilder: (context, state) => buildPageWithDefaultTransition(
+            context: context,
+            state: state,
+            child: GameInvitationScreen(
+              displayName: state.params['display_name']!,
+              ouid: state.params['ouid']!,
+            ),
+          ),
+        ),
+        GoRoute(
           path: '/licenses',
           pageBuilder: (context, state) => buildPageWithDefaultTransition(
             child: const LicensesScreen(),
@@ -113,19 +136,21 @@ class SudokGo extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme(
-          brightness: Brightness.light,
-          background: Colors.blueGrey[50]!,
-          onBackground: Colors.black,
-          surface: Colors.blueGrey[50]!,
-          onSurface: Colors.black,
-          primary: Colors.purple[200]!,
-          primaryContainer: Colors.deepPurple[200],
-          onPrimary: Colors.white,
+          brightness: Brightness.dark,
+          background: Colors.blueGrey[700]!,
+          onBackground: Colors.white,
+          surface: Colors.blueGrey[700]!,
+          onSurface: Colors.white,
+          primary: Colors.purple[100]!,
+          primaryContainer: Colors.purple[200],
+          onPrimary: Colors.blueGrey[900]!,
           onPrimaryContainer: Colors.white,
-          secondary: Colors.grey[300]!,
+          secondary: Colors.blueGrey[900]!,
           secondaryContainer: Colors.grey,
-          onSecondary: Colors.black,
+          onSecondary: Colors.white,
           onSecondaryContainer: Colors.white,
+          tertiary: Colors.black,
+          onTertiary: Colors.white,
           error: Colors.red[900]!,
           onError: Colors.white,
         ),

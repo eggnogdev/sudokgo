@@ -30,6 +30,5 @@ class AdsPreference {
   }
 
   @override
-  // TODO: implement hashCode
   int get hashCode => super.hashCode;
 }

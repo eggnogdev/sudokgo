@@ -27,7 +27,7 @@ class SudokGoMenuButton extends StatelessWidget {
         onPressed: onPressed,
         style: TextButton.styleFrom(
           elevation: 10.0,
-          shadowColor: Theme.of(context).colorScheme.primaryContainer,
+          shadowColor: Theme.of(context).colorScheme.tertiary,
           foregroundColor: Theme.of(context).colorScheme.onSurface,
           backgroundColor: Theme.of(context).colorScheme.surface,
           shape: RoundedRectangleBorder(

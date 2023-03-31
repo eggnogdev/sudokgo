@@ -1,6 +1,9 @@
+import 'package:sudokgo/src/game_screen/game_difficulty.dart';
+import 'package:sudokgo/src/game_screen/game_session.dart';
 import 'package:sudokgo/src/hive/hive_wrapper.dart';
 import 'package:sudokgo/src/types/supabase.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 class SudokGoApi {
   const SudokGoApi();
@@ -135,7 +138,7 @@ class SudokGoApi {
   /// remove the relationship, such as cancel an outgoing request, decline an
   /// incoming request, remove a friend, and unblock a user
   ///
-  /// `other` represents the [int] uuid of the other user in the relationship
+  /// `other` represents the [String] uuid of the other user in the relationship
   static Future<void> removeRelationship(String other) async {
     await supabase
         .from('friendships')
@@ -163,6 +166,73 @@ class SudokGoApi {
         })
         .or('source_user_id.eq.$uid,target_user_id.eq.$uid')
         .or('source_user_id.eq.$other,target_user_id.eq.$other');
+  }
+
+  /// create a sudoku game and insert a row into the comp_games table to
+  /// initiate a game with the `other` user which is represented by their
+  /// [String] uuid
+  static Future<void> initiateCompWithOther(String other) async {
+    SudokuGenerator sudoku;
+
+    switch (GameSession.selectedDifficulty) {
+      case GameDifficulty.easy:
+        sudoku = SudokuGenerator(emptySquares: 27, uniqueSolution: true);
+        break;
+      case GameDifficulty.medium:
+        sudoku = SudokuGenerator(emptySquares: 36, uniqueSolution: true);
+        break;
+      case GameDifficulty.hard:
+        sudoku = SudokuGenerator(emptySquares: 54, uniqueSolution: true);
+        break;
+      default:
+        throw Exception(
+            'Invalid GameDifficulty value: ${GameSession.selectedDifficulty?.value}');
+    }
+
+    await supabase
+      .from('comp_games')
+      .insert({
+        'initiator': uid,
+        'participant': other,
+        'board': sudoku.newSudoku,
+        'solution': sudoku.newSudokuSolved,
+      });
+  }
+
+  static Future<void> endAllComp() async {
+    await supabase
+      .from('comp_games')
+      .delete()
+      .or('initiator.eq.$uid,participant.eq.$uid');
+  }
+  
+  /// delete all comp games from the table that the user has initiated
+  static Future<void> endInitiatedComp() async {
+    await supabase
+      .from('comp_games')
+      .delete()
+      .eq('initiator', uid);
+  }
+
+  /// delete all comp games from the table that another user initiated for the
+  /// current user
+  static Future<void> endParticipatingComp() async {
+    await supabase
+      .from('comp_games')
+      .delete()
+      .eq('participant', uid);
+  }
+
+  /// accept an invitation to a comp game that another user has initited for the
+  /// current user. `other` represents the [String] uid 
+  static Future<void> acceptParticipatingComp(String other) async {
+    await supabase
+      .from('comp_games')
+      .update({
+        'accepted': true,
+      })
+      .eq('initiator', other)
+      .eq('participant', uid);
   }
 }
 

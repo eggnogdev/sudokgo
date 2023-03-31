@@ -4,8 +4,8 @@ import 'package:sudokgo/src/hive/game.dart';
 
 class GameSession extends ChangeNotifier {
   ValueNotifier<String?> selectedValue = ValueNotifier<String?>(null);
-  ValueNotifier<List<List<int>>> userSolution =
-      ValueNotifier<List<List<int>>>([]);
+  ValueNotifier<List<dynamic>> userSolution =
+      ValueNotifier<List<dynamic>>([]);
   Game? game;
 
   /// puzzle is only used to keep track of the original puzzle before the user

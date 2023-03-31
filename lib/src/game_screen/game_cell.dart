@@ -22,7 +22,7 @@ class GameCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<List<List<int>>>(
+    return ValueListenableBuilder<List<dynamic>>(
         valueListenable: gameSession.userSolution,
         builder: (context, value, _) {
           final bool locked = gameSession.puzzle[row * 9 + col] != '0';
