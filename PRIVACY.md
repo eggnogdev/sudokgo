@@ -8,6 +8,7 @@ All data stays on your device unless you sign up to access online functionality.
 
 In the case that you do sign up for online functionality, the following will be collected:
 - account information
+  - generated account ID   
   - time of creation
   - time of last update
   - display name
