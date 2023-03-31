@@ -8,9 +8,8 @@ All data stays on your device unless you sign up to access online functionality.
 
 In the case that you do sign up for online functionality, the following will be collected:
 - account information
-  - generated account ID   
-  - time of creation
-  - time of last update
+  - date & time of creation
+  - date & time of last update
   - display name
   - email
 
@@ -22,6 +21,8 @@ In the case that you do sign up for online functionality, the following will be 
 - online gameplay (SudokGo session)
   - information necessary for incoming and outgoing requests for a session
   - information necessary for ongoing sessions
+
+contact me at daniel.s.egorov@proton.me if you would like your data to be deleted for any reason.
   
 
 ## Third party services
