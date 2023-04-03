@@ -189,50 +189,51 @@ class SudokGoApi {
             'Invalid GameDifficulty value: ${GameSession.selectedDifficulty?.value}');
     }
 
-    await supabase
-      .from('comp_games')
-      .insert({
-        'initiator': uid,
-        'participant': other,
-        'board': sudoku.newSudoku,
-        'solution': sudoku.newSudokuSolved,
-      });
+    await supabase.from('comp_games').insert({
+      'initiator': uid,
+      'participant': other,
+      'board': sudoku.newSudoku,
+      'solution': sudoku.newSudokuSolved,
+    });
   }
 
   static Future<void> endAllComp() async {
     await supabase
-      .from('comp_games')
-      .delete()
-      .or('initiator.eq.$uid,participant.eq.$uid');
+        .from('comp_games')
+        .delete()
+        .or('initiator.eq.$uid,participant.eq.$uid');
   }
-  
+
   /// delete all comp games from the table that the user has initiated
   static Future<void> endInitiatedComp() async {
-    await supabase
-      .from('comp_games')
-      .delete()
-      .eq('initiator', uid);
+    await supabase.from('comp_games').delete().eq('initiator', uid);
   }
 
   /// delete all comp games from the table that another user initiated for the
   /// current user
   static Future<void> endParticipatingComp() async {
-    await supabase
-      .from('comp_games')
-      .delete()
-      .eq('participant', uid);
+    await supabase.from('comp_games').delete().eq('participant', uid);
   }
 
   /// accept an invitation to a comp game that another user has initited for the
-  /// current user. `other` represents the [String] uid 
+  /// current user. `other` represents the [String] uid
   static Future<void> acceptParticipatingComp(String other) async {
     await supabase
-      .from('comp_games')
-      .update({
-        'accepted': true,
-      })
-      .eq('initiator', other)
-      .eq('participant', uid);
+        .from('comp_games')
+        .update({
+          'accepted': true,
+        })
+        .eq('initiator', other)
+        .eq('participant', uid);
+  }
+
+  /// set the display_name stored in the database of the current user
+  static Future<void> setDisplayName(String displayName) async {
+    if (session() == null) return;
+
+    await supabase.from('users').update({
+      'display_name': displayName,
+    }).eq('id', uid);
   }
 }
 

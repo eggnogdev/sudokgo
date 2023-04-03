@@ -70,6 +70,7 @@ class OptionsScreen extends StatelessWidget {
                             onSubmit: (text) {
                               if (text == '') return;
                               HiveWrapper.setDisplayName(text);
+                              SudokGoApi.setDisplayName(text);
                               Navigator.pop(context);
                             },
                           ),
