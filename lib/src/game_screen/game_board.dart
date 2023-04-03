@@ -23,58 +23,56 @@ class GameBoard extends StatefulWidget {
 
 class _GameBoardState extends State<GameBoard> {
   bool loadingInitial = true;
-  late StreamSubscription listener;
-  
+  StreamSubscription? listener;
+
   @override
   void initState() {
     super.initState();
     if (OnlineStatus.online.value) {
       listener = SudokGoApi.supabase
-        .from('comp_games')
-        .stream(primaryKey: ['id'])
-        .where((List<Map<String, dynamic>> data) {
-          if (data.isNotEmpty) {
-            if (data[0]['initiator'] == SudokGoApi.uid) return true;
-            if (data[0]['participant'] == SudokGoApi.uid) return true;
-            return false;
-          }
-          return true;
-        })
-        .listen((List<Map<String, dynamic>> data) async {
-          if (data.isEmpty) {
-            GoRouter.of(context).go('/');
-            return;
-          }
-          
-          if (loadingInitial) {
-            widget.gameSession.puzzle = flattenPuzzleToString(data[0]['board']);
-            widget.gameSession.userSolution.value = data[0]['board'];
-          }
+          .from('comp_games')
+          .stream(primaryKey: ['id']).where((List<Map<String, dynamic>> data) {
+        if (data.isNotEmpty) {
+          if (data[0]['initiator'] == SudokGoApi.uid) return true;
+          if (data[0]['participant'] == SudokGoApi.uid) return true;
+          return false;
+        }
+        return true;
+      }).listen((List<Map<String, dynamic>> data) async {
+        if (data.isEmpty) {
+          GoRouter.of(context).go('/');
+          return;
+        }
 
-          if (data[0]['winner'] != null) {
-            if (data[0]['winner'] == SudokGoApi.uid) {
-              showDialog(
-                context: context,
-                builder: (context) => const WinDialog(winnerName: 'you'),
-              );
-            } else {
-              final winner = (await SudokGoApi.supabase
+        if (loadingInitial) {
+          widget.gameSession.puzzle = flattenPuzzleToString(data[0]['board']);
+          widget.gameSession.userSolution.value = data[0]['board'];
+        }
+
+        if (data[0]['winner'] != null) {
+          if (data[0]['winner'] == SudokGoApi.uid) {
+            showDialog(
+              context: context,
+              builder: (context) => const WinDialog(winnerName: 'you'),
+            );
+          } else {
+            final winner = (await SudokGoApi.supabase
                 .from('users')
                 .select<List<Map<String, dynamic>>>()
                 .eq('id', data[0]['winner']))[0];
-              showDialog(
+            showDialog(
                 context: context,
-                builder: (context) => WinDialog(winnerName: winner['display_name'])
-              );
-            }
+                builder: (context) =>
+                    WinDialog(winnerName: winner['display_name']));
           }
-          
-          if (loadingInitial) {
-            setState(() {
-              loadingInitial = false;
-            });
-          }
-        });
+        }
+
+        if (loadingInitial) {
+          setState(() {
+            loadingInitial = false;
+          });
+        }
+      });
     } else {
       final game = grabGame();
 
@@ -86,92 +84,104 @@ class _GameBoardState extends State<GameBoard> {
 
   @override
   void dispose() {
-    listener.cancel();
+    listener?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final double size = MediaQuery.of(context).size.width / 1.1;
-    return loadingInitial && OnlineStatus.online.value ? Center(
-      child: CircularProgressIndicator(
-        color: Theme.of(context).colorScheme.primaryContainer,
-      ),
-    ) : Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.0),
-        color: Theme.of(context).colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            blurRadius: 5.0,
-          ),
-        ],
-      ),
-      width: size,
-      height: size,
-      child: Column(
-        children: [
-          for (int i = 0; i < 3; i++)
-            Row(
-              children: [
-                for (int j = 0; j < 3; j++)
-                  GameBox(
-                    gameSession: widget.gameSession,
-                    cellOnPressed: (row, col) async {
-                      final String? value =
-                          widget.gameSession.selectedValue.value;
-
-                      if (value == null) return;
-
-                      if (value == 'X') {
-                        updateUserSolution(row, col, 0);
-                      } else {
-                        updateUserSolution(row, col, int.parse(value));
-                      }
-
-                      bool isSolved = false;
-
-                      try {
-                        final List<List<int>> converted = [];
-                        for (int i = 0; i < widget.gameSession.userSolution.value.length; i++) {
-                          final List<int> temp = [];
-                          for (int j = 0; j < widget.gameSession.userSolution.value[i].length; j++) {
-                            temp.add(widget.gameSession.userSolution.value[i][j]);
-                          }
-                          converted.add(temp);
-                        }
-                        isSolved = SudokuUtilities.isSolved(converted);
-                      } catch (e) {
-                        /// instead of returning false for some reason this library
-                        /// likes to throw an Exception instead therefore this
-                        /// ugly try/catch block must be made
-                      }
-
-                      if (isSolved) {
-                        if (OnlineStatus.online.value) {
-                          await SudokGoApi.supabase
-                            .from('comp_games')
-                            .update({
-                              'winner': SudokGoApi.uid,
-                            })
-                            .or('initiator.eq.${SudokGoApi.uid},participant.eq.${SudokGoApi.uid}');
-                        } else {
-                          showDialog(
-                            context: context,
-                            builder: (context) => const WinDialog(winnerName: 'you',),
-                          );
-                        }
-                      }
-                    },
-                    cells: getBox(i * 3 + j),
-                    boardSize: size,
-                  )
+    return loadingInitial && OnlineStatus.online.value
+        ? Center(
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primaryContainer,
+            ),
+          )
+        : Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: Theme.of(context).colorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  blurRadius: 5.0,
+                ),
               ],
             ),
-        ],
-      ),
-    );
+            width: size,
+            height: size,
+            child: Column(
+              children: [
+                for (int i = 0; i < 3; i++)
+                  Row(
+                    children: [
+                      for (int j = 0; j < 3; j++)
+                        GameBox(
+                          gameSession: widget.gameSession,
+                          cellOnPressed: (row, col) async {
+                            final String? value =
+                                widget.gameSession.selectedValue.value;
+
+                            if (value == null) return;
+
+                            if (value == 'X') {
+                              updateUserSolution(row, col, 0);
+                            } else {
+                              updateUserSolution(row, col, int.parse(value));
+                            }
+
+                            bool isSolved = false;
+
+                            try {
+                              final List<List<int>> converted = [];
+                              for (int i = 0;
+                                  i <
+                                      widget.gameSession.userSolution.value
+                                          .length;
+                                  i++) {
+                                final List<int> temp = [];
+                                for (int j = 0;
+                                    j <
+                                        widget.gameSession.userSolution.value[i]
+                                            .length;
+                                    j++) {
+                                  temp.add(widget
+                                      .gameSession.userSolution.value[i][j]);
+                                }
+                                converted.add(temp);
+                              }
+                              isSolved = SudokuUtilities.isSolved(converted);
+                            } catch (e) {
+                              /// instead of returning false for some reason this library
+                              /// likes to throw an Exception instead therefore this
+                              /// ugly try/catch block must be made
+                            }
+
+                            if (isSolved) {
+                              if (OnlineStatus.online.value) {
+                                await SudokGoApi.supabase
+                                    .from('comp_games')
+                                    .update({
+                                  'winner': SudokGoApi.uid,
+                                }).or('initiator.eq.${SudokGoApi.uid},participant.eq.${SudokGoApi.uid}');
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => const WinDialog(
+                                    winnerName: 'you',
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          cells: getBox(i * 3 + j),
+                          boardSize: size,
+                        )
+                    ],
+                  ),
+              ],
+            ),
+          );
   }
 
   Game grabGame() {
