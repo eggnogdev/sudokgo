@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -19,6 +20,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
   await Hive.initFlutter();
   Hive.registerAdapter(GameAdapter());
@@ -37,8 +39,11 @@ void main() async {
   if (HiveWrapper.getDisplayName() == null) initialRoute = '/onboarding';
 
   runApp(
-    SudokGo(
-      initialRoute: initialRoute,
+    ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: SudokGo(
+        initialRoute: initialRoute,
+      ),
     ),
   );
 }
@@ -107,7 +112,7 @@ class SudokGo extends StatelessWidget {
             child: WaitingScreen(
               displayName: state.params['display_name']!,
             ),
-          ) ,
+          ),
         ),
         GoRoute(
           path: '/game_invitation/:display_name/:ouid',

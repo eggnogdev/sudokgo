@@ -34,28 +34,26 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    databaseListener = SudokGoApi.supabase
-      .from('comp_games')
-      .stream(primaryKey: ['id'])
-      .listen((List<Map<String, dynamic>> data) async {
-        if (data.isNotEmpty) {
-          if (data[0]['initiator'] == SudokGoApi.uid) return;
-          final initiator = await SudokGoApi.supabase
+    databaseListener = SudokGoApi.supabase.from('comp_games').stream(
+        primaryKey: ['id']).listen((List<Map<String, dynamic>> data) async {
+      if (data.isNotEmpty) {
+        if (data[0]['initiator'] == SudokGoApi.uid) return;
+        final initiator = await SudokGoApi.supabase
             .from('users')
             .select<List<Map<String, dynamic>>>()
             .eq('id', data[0]['initiator']);
-          final displayName = initiator[0]['display_name'];
-          final id = initiator[0]['id'];
-          
-          GoRouter.of(context).go('/game_invitation/$displayName/$id');
-        }
-      });
-      if (OnlineStatus.online.value) {
-        databaseListener.resume();
-      } else {
-        databaseListener.pause();
+        final displayName = initiator[0]['display_name'];
+        final id = initiator[0]['id'];
+
+        GoRouter.of(context).go('/game_invitation/$displayName/$id');
       }
-      OnlineStatus.online.addListener(onlineStatusListener);
+    });
+    if (OnlineStatus.online.value) {
+      databaseListener.resume();
+    } else {
+      databaseListener.pause();
+    }
+    OnlineStatus.online.addListener(onlineStatusListener);
   }
 
   @override
@@ -64,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
     OnlineStatus.online.removeListener(onlineStatusListener);
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
