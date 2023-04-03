@@ -1,7 +1,6 @@
 # sudokgo
 
 SudokGo! - Play sudoku with your friends (or not).
-ONLINE PLAY STILL TO COME
 
 ## What is SudokGo?
 
