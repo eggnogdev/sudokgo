@@ -5,7 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:sudokgo/src/api/api.dart';
 
 class WaitingScreen extends StatefulWidget {
-  const WaitingScreen({super.key, required this.displayName,});
+  const WaitingScreen({
+    super.key,
+    required this.displayName,
+  });
 
   final String displayName;
 
@@ -14,31 +17,31 @@ class WaitingScreen extends StatefulWidget {
 }
 
 class _WaitingScreenState extends State<WaitingScreen> {
-  late StreamSubscription listener;
-  
+  StreamSubscription? listener;
+
   @override
   void initState() {
     super.initState();
 
     listener = SudokGoApi.supabase
-      .from('comp_games')
-      .stream(primaryKey: ['id'])
-      .eq('initiator', SudokGoApi.uid)
-      .listen((List<Map<String, dynamic>> data) {
-        if (data.isEmpty) {
-          GoRouter.of(context).go('/');
-        } else if (data[0]['accepted']) {
-          GoRouter.of(context).go('/game');
-        }
-      });
+        .from('comp_games')
+        .stream(primaryKey: ['id'])
+        .eq('initiator', SudokGoApi.uid)
+        .listen((List<Map<String, dynamic>> data) {
+          if (data.isEmpty) {
+            GoRouter.of(context).go('/');
+          } else if (data[0]['accepted']) {
+            GoRouter.of(context).go('/game');
+          }
+        });
   }
 
   @override
   void dispose() {
-    listener.cancel();
+    listener?.cancel();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -64,7 +67,7 @@ class _WaitingScreenState extends State<WaitingScreen> {
               TextButton(
                 onPressed: () {
                   SudokGoApi.endInitiatedComp()
-                    .then((_) => GoRouter.of(context).go('/'));
+                      .then((_) => GoRouter.of(context).go('/'));
                 },
                 child: Text(
                   'cancel',

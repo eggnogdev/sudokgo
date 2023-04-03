@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sudokgo/src/api/api.dart';
 
 class GameInvitationScreen extends StatefulWidget {
-  const GameInvitationScreen({super.key, required this.displayName, required this.ouid,});
+  const GameInvitationScreen({
+    super.key,
+    required this.displayName,
+    required this.ouid,
+  });
 
   final String displayName;
   final String ouid;
@@ -13,6 +19,26 @@ class GameInvitationScreen extends StatefulWidget {
 }
 
 class _GameInvitationScreenState extends State<GameInvitationScreen> {
+  StreamSubscription? listener;
+
+  @override
+  void initState() {
+    super.initState();
+
+    listener = SudokGoApi.supabase
+        .from('comp_games')
+        .stream(primaryKey: ['id'])
+        .eq('participant', SudokGoApi.uid)
+        .eq('initiator', widget.ouid)
+        .listen(
+          (List<Map<String, dynamic>> data) {
+            if (data.isEmpty) {
+              GoRouter.of(context).go('/');
+            }
+          },
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -41,7 +67,7 @@ class _GameInvitationScreenState extends State<GameInvitationScreen> {
                   TextButton(
                     onPressed: () {
                       SudokGoApi.acceptParticipatingComp(widget.ouid)
-                        .then((_) => GoRouter.of(context).go('/game'));
+                          .then((_) => GoRouter.of(context).go('/game'));
                     },
                     child: Text(
                       'accept',
@@ -54,7 +80,7 @@ class _GameInvitationScreenState extends State<GameInvitationScreen> {
                   TextButton(
                     onPressed: () {
                       SudokGoApi.endParticipatingComp()
-                      .then((_) => GoRouter.of(context).go('/'));
+                          .then((_) => GoRouter.of(context).go('/'));
                     },
                     child: Text(
                       'decline',
