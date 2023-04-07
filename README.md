@@ -2,6 +2,10 @@
 
 SudokGo! - Play sudoku with your friends (or not).
 
+## Download!
+
+Early Access now available on the [Google Play Store](https://play.google.com/store/apps/details?id=com.danielegorov.sudokgo)! Also check the [releases](https://github.com/Daniel-Egorov/sudokgo/releases).
+
 ## What is SudokGo?
 
 SudokGo was an idea born when I was working on a sudoku app for my beautiful girlfriend Lauren. I wanted to make a really simple and beautiful sudoku app for her that fit her likings perfectly.
